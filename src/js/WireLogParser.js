@@ -129,16 +129,26 @@ var WireLogParser = (function () {
             }
         }
 
-        var length = requestLogByGroup.length;
-        if (length - responseLogByGroup.length < 0) {
-            length = responseLogByGroup.length;
+        var numOfLog = requestLogByGroup.length;
+        if (numOfLog - responseLogByGroup.length < 0) {
+            numOfLog = responseLogByGroup.length;
         }
 
-        return {
-            'requestLog': requestLogByGroup,
-            'responseLog': responseLogByGroup,
-            'length': length
-        };
+        var i;
+        var logs = [];
+        for (i = 0; i < numOfLog; i++) {
+            if (typeof requestLogByGroup[i] === 'undefined' && typeof responseLogByGroup[i] === 'undefined') {
+                logs.push(undefined);
+                continue;
+            }
+
+            logs.push({
+                'requestLog': requestLogByGroup[i],
+                'responseLog': responseLogByGroup[i]
+            });
+        }
+
+        return logs;
     };
 
     return WireLogParser;
