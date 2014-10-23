@@ -1,7 +1,7 @@
 var should = require('chai').should();
 var heredoc = require('heredoc');
 
-var parser = require('../src/WireLogParser.js');
+var parser = require('../src/js/WireLogParser.js');
 
 describe('WireLogParser', function () {
     describe('#parse', function () {
@@ -92,6 +92,8 @@ describe('WireLogParser', function () {
                     }
                 ]
             ]);
+
+            parsed.length.should.equal(1);
         });
 
         it('should parse the mixed log rightly', function () {
@@ -248,6 +250,8 @@ describe('WireLogParser', function () {
                     }
                 ]
             ]);
+
+            parsed.length.should.equal(3);
         });
     });
 });

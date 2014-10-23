@@ -129,9 +129,15 @@ var WireLogParser = (function () {
             }
         }
 
+        var length = requestLogByGroup.length;
+        if (length - responseLogByGroup.length < 0) {
+            length = responseLogByGroup.length;
+        }
+
         return {
             'requestLog': requestLogByGroup,
-            'responseLog': responseLogByGroup
+            'responseLog': responseLogByGroup,
+            'length': length
         };
     };
 
