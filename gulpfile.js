@@ -1,5 +1,7 @@
-var gulp = require('gulp');
-var mocha = require('gulp-mocha');
+var gulp = require('gulp'),
+    mocha = require('gulp-mocha'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish');
 
 gulp.task('test', function () {
     if (typeof process.env.NODE_ENV === 'undefined') {
@@ -9,3 +11,8 @@ gulp.task('test', function () {
         .pipe(mocha({ui: 'bdd', reporter: 'spec'}));
 });
 
+gulp.task('lint', function () {
+    return gulp.src(['src/*.js'])
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish));
+});

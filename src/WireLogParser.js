@@ -1,6 +1,6 @@
-'use strict';
-
 var WireLogParser = (function () {
+    'use strict';
+
     var RequestLog = (function () {
         function RequestLog(arg) {
             this.log = arg.log;
@@ -44,7 +44,14 @@ var WireLogParser = (function () {
             return log.replace(/(\[\\r\])?\[\\n\]/, ''); // remove string like so "[\r][\n]"
         };
 
-        var assembleLogObj = function (self, log, group, logContainer, logClass, direction) {
+        var assembleLogObj = function (args) {
+            var self = args.self,
+                log = args.log,
+                group = args.group,
+                logContainer = args.logContainer,
+                LogClass = args.LogClass,
+                direction = args.direction;
+
             if (self.doesRemoveNewLine === true) {
                 log = removeNewLine(log);
             }
@@ -71,7 +78,7 @@ var WireLogParser = (function () {
             }
 
             logContainer[group].push(
-                new logClass({
+                new LogClass({
                     'log': log,
                     'type': type,
                     'headerName': headerName
@@ -82,8 +89,8 @@ var WireLogParser = (function () {
         var requestLogByGroup = [];
         var responseLogByGroup = [];
 
-        var lines = logText.split(/\r?\n/);
         var line, lineNum, found;
+        var lines = logText.split(/\r?\n/);
         var numOfLines = lines.length;
         for (lineNum = 0; lineNum < numOfLines; lineNum++) {
             line = lines[lineNum];
@@ -96,14 +103,28 @@ var WireLogParser = (function () {
             // for request
             found = line.match(/.*http-outgoing-([0-9]+) >> ("?)(.*)\2/);
             if (found) {
-                assembleLogObj(this, found[3], found[1], requestLogByGroup, RequestLog, 'request');
+                assembleLogObj({
+                    'self': this,
+                    'log': found[3],
+                    'group': found[1],
+                    'logContainer': requestLogByGroup,
+                    'LogClass': RequestLog,
+                    'direction': 'request'
+                });
                 continue;
             }
 
             // for response
             found = line.match(/.*http-outgoing-([0-9]+) << ("?)(.*)\2/);
             if (found) {
-                assembleLogObj(this, found[3], found[1], responseLogByGroup, ResponseLog, 'response');
+                assembleLogObj({
+                    'self': this,
+                    'log': found[3],
+                    'group': found[1],
+                    'logContainer': responseLogByGroup,
+                    'LogClass': ResponseLog,
+                    'direction': 'response'
+                });
                 continue;
             }
         }
@@ -118,6 +139,6 @@ var WireLogParser = (function () {
 }());
 
 // for testing
-if(typeof process !== "undefined" && process.env && process.env.NODE_ENV === 'test') {
+if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'test') {
    exports.WireLogParser = WireLogParser;
 }
