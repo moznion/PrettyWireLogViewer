@@ -1,34 +1,43 @@
 var WireLogParser = (function () {
     'use strict';
 
-    var RequestLog = (function () {
-        function RequestLog(arg) {
-            this.log = arg.log;
-            this.type = arg.type;
-            if (arg.headerName) {
-                this.headerName = arg.headerName;
-            }
-        }
-        return RequestLog;
-    }());
-
-    var ResponseLog = (function () {
-        function ResponseLog(arg) {
-            this.log = arg.log;
-            this.type = arg.type;
-            if (arg.headerName) {
-                this.headerName = arg.headerName;
-            }
-        }
-        return ResponseLog;
-    }());
-
     function WireLogParser(doesRemoveNewLine) {
         if (doesRemoveNewLine !== false) {
             doesRemoveNewLine = true;
         }
         this.doesRemoveNewLine = doesRemoveNewLine;
     }
+
+    var WireLog = (function () {
+        function WireLog() {
+            this.logs = [];
+        }
+
+        WireLog.prototype.add = function (arg) {
+            var log = {
+                'log': arg.log,
+                'type': arg.type
+            };
+            if (arg.headerName) {
+                log.headerName = arg.headerName;
+            }
+            this.logs.push(log);
+        };
+
+        WireLog.prototype.toString = function () {
+            var str = '';
+            var logsLength = this.logs.length;
+            var i;
+
+            for (i = 0; i < logsLength; i++) {
+                str += this.logs[i].log + "\n";
+            }
+
+            return str;
+        };
+
+        return WireLog;
+    }());
 
     WireLogParser.prototype.parse = function (logText) {
         var extractHeaderName = function (log) {
@@ -49,7 +58,6 @@ var WireLogParser = (function () {
                 log = args.log,
                 group = args.group,
                 logContainer = args.logContainer,
-                LogClass = args.LogClass,
                 direction = args.direction;
 
             if (self.doesRemoveNewLine === true) {
@@ -59,8 +67,8 @@ var WireLogParser = (function () {
             var type = 'body';
 
             // init (at the 1st line of request or response)
-            if ((logContainer[group] instanceof Array) === false) {
-                logContainer[group] = [];
+            if (typeof logContainer[group] === 'undefined') {
+                logContainer[group] = new WireLog();
                 type = 'http-' + direction;
             }
 
@@ -70,20 +78,18 @@ var WireLogParser = (function () {
             }
 
             // To set 'body' into `type` when log is beyond the blank line
-            var logBlock = logContainer[group];
-            var lastLogItem = logContainer[group][logBlock.length - 1];
+            var logBlock = logContainer[group].logs;
+            var lastLogItem = logBlock[logBlock.length - 1];
             if (typeof lastLogItem !== 'undefined' && lastLogItem.type === 'body') {
                 type = 'body';
                 headerName = undefined;
             }
 
-            logContainer[group].push(
-                new LogClass({
-                    'log': log,
-                    'type': type,
-                    'headerName': headerName
-                })
-            );
+            logContainer[group].add({
+                'log': log,
+                'type': type,
+                'headerName': headerName
+            });
         };
 
         var requestLogByGroup = [];
@@ -108,7 +114,6 @@ var WireLogParser = (function () {
                     'log': found[3],
                     'group': found[1],
                     'logContainer': requestLogByGroup,
-                    'LogClass': RequestLog,
                     'direction': 'request'
                 });
                 continue;
@@ -122,7 +127,6 @@ var WireLogParser = (function () {
                     'log': found[3],
                     'group': found[1],
                     'logContainer': responseLogByGroup,
-                    'LogClass': ResponseLog,
                     'direction': 'response'
                 });
                 continue;
@@ -138,7 +142,7 @@ var WireLogParser = (function () {
         var logs = [];
         for (i = 0; i < numOfLog; i++) {
             if (typeof requestLogByGroup[i] === 'undefined' && typeof responseLogByGroup[i] === 'undefined') {
-                logs.push(undefined);
+                logs.push({});
                 continue;
             }
 
