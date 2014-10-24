@@ -219,7 +219,8 @@ Server: Jetty(9.2.3.v20140905)
                     ]
                 );
 
-                parsed[1].should.deep.equal({});
+                parsed[1].requestLog.logs.should.deep.equal([]);
+                parsed[1].responseLog.logs.should.deep.equal([]);
 
                 parsed[2].requestLog.logs.should.deep.equal(
                     [
@@ -300,13 +301,16 @@ Server: Jetty(9.2.3.v20140905)
 {"code":200,"messages":[],"data":{"foo":[{"bar":123,"buz":456},{"bar":321,"buz":654}]}}
                 */}));
 
-               parsed[2].requestLog.toString().should.equal(heredoc(function () {/*
+                parsed[1].requestLog.toString().should.equal('');
+                parsed[1].responseLog.toString().should.equal('');
+
+                parsed[2].requestLog.toString().should.equal(heredoc(function () {/*
 GET /api/bar HTTP/1.1
 Host: 127.0.0.1:9292
 User-Agent: Apache-HttpClient/4.3.5 (java 1.5)
 
-               */}));
-               parsed[2].responseLog.toString().should.equal(heredoc(function () {/*
+                */}));
+                parsed[2].responseLog.toString().should.equal(heredoc(function () {/*
 HTTP/1.1 200 OK
 Date: Tue, 21 Oct 2014 14:38:11 GMT
 Content-Type: application/json; charset=utf-8
@@ -314,7 +318,17 @@ Content-Length: 36
 Server: Jetty(9.2.3.v20140905)
 
 {"code":200,"messages":[],"data":{}}
-               */}));
+                */}));
+            });
+
+            it('should check empty or not rightly', function () {
+                parsed[0].isEmpty().should.equal(false);
+                parsed[0].requestLog.isEmpty().should.equal(false);
+                parsed[0].responseLog.isEmpty().should.equal(false);
+
+                parsed[1].isEmpty().should.equal(true);
+                parsed[1].requestLog.isEmpty().should.equal(true);
+                parsed[1].responseLog.isEmpty().should.equal(true);
             });
         });
     });

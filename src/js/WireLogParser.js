@@ -8,12 +8,12 @@ var WireLogParser = (function () {
         this.doesRemoveNewLine = doesRemoveNewLine;
     }
 
-    var WireLog = (function () {
-        function WireLog() {
+    var WireLogUnit = (function () {
+        function WireLogUnit() {
             this.logs = [];
         }
 
-        WireLog.prototype.add = function (arg) {
+        WireLogUnit.prototype.add = function (arg) {
             var log = {
                 'log': arg.log,
                 'type': arg.type
@@ -24,7 +24,7 @@ var WireLogParser = (function () {
             this.logs.push(log);
         };
 
-        WireLog.prototype.toString = function () {
+        WireLogUnit.prototype.toString = function () {
             var str = '';
             var logsLength = this.logs.length;
             var i;
@@ -34,6 +34,40 @@ var WireLogParser = (function () {
             }
 
             return str;
+        };
+
+        WireLogUnit.prototype.isEmpty = function () {
+            return this.logs.length === 0;
+        };
+
+        return WireLogUnit;
+    }());
+
+    var WireLog = (function () {
+        function WireLog(arg) {
+            var requestLog = arg.requestLog;
+            var responseLog = arg.responseLog;
+
+            if (
+                typeof requestLog === 'undefined' ||
+                !(requestLog instanceof WireLogUnit)
+            ) {
+                requestLog = new WireLogUnit();
+            }
+
+            if (
+                typeof responseLog === 'undefined' ||
+                !(responseLog instanceof WireLogUnit)
+            ) {
+                responseLog = new WireLogUnit();
+            }
+
+            this.requestLog = requestLog;
+            this.responseLog = responseLog;
+        }
+
+        WireLog.prototype.isEmpty = function () {
+            return this.requestLog.isEmpty() && this.responseLog.isEmpty();
         };
 
         return WireLog;
@@ -68,7 +102,7 @@ var WireLogParser = (function () {
 
             // init (at the 1st line of request or response)
             if (typeof logContainer[group] === 'undefined') {
-                logContainer[group] = new WireLog();
+                logContainer[group] = new WireLogUnit();
                 type = 'http-' + direction;
             }
 
@@ -141,15 +175,10 @@ var WireLogParser = (function () {
         var i;
         var logs = [];
         for (i = 0; i < numOfLog; i++) {
-            if (typeof requestLogByGroup[i] === 'undefined' && typeof responseLogByGroup[i] === 'undefined') {
-                logs.push({});
-                continue;
-            }
-
-            logs.push({
+            logs.push(new WireLog({
                 'requestLog': requestLogByGroup[i],
                 'responseLog': responseLogByGroup[i]
-            });
+            }));
         }
 
         return logs;
