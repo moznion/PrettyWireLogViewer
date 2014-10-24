@@ -6,7 +6,9 @@ Pretty viewer for wire logging of Apache HttpClient
 Getting Started
 ---------------
 
-Access to `index.html`
+[Sample is here](http://moznion.github.io/PrettyWireLogViewer/)
+
+If you want to use on your local environment, please access to `index.html`.
 
 For Developers
 --------------
