@@ -10,6 +10,8 @@ $(function () {
         },
         methods: {
             getPretty: function () {
+                data.logs = {}; // Initialize
+
                 var self = this;
                 var data = self.$data;
 
