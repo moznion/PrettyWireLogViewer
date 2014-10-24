@@ -5,16 +5,17 @@ $(function () {
     var vm = new Vue({
         el: '#main',
         data: {
-            'logs': {},
-            'Object': Object,
+            'logs': {}
         },
         methods: {
             getPretty: function () {
-                data.logs = {}; // Initialize
-
                 var self = this;
                 var data = self.$data;
 
+                // Initialize to redraw when data.logs is changed
+                _(Object.keys(data.logs)).forEach(function (key) {
+                    data.logs.$delete(key);
+                });
                 var wireLogParser = new WireLogParser();
 
                 var logs = {};
