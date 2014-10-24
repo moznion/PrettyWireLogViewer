@@ -5,16 +5,21 @@
   "description": "Pretty viewer for wire logging of Apache HttpClient",
   "dependencies": {},
   "devDependencies": {
+    "bower": "^1.3.12",
     "chai": "^1.9.2",
+    "del": "^0.1.3",
     "gulp": "^3.8.9",
+    "gulp-filter": "^1.0.2",
     "gulp-jshint": "^1.8.5",
     "gulp-mocha": "^1.1.1",
     "heredoc": "^1.2.0",
     "jshint-stylish": "^1.0.0",
+    "main-bower-files": "^2.1.0",
     "mocha": "^2.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/moznion/PrettyWireLogViewer.git"
-  }
+  },
+  "license": "MIT"
 }

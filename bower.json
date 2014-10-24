@@ -1,0 +1,35 @@
+{
+  "name": "PrettyWireLogViewer",
+  "version": "0.0.1",
+  "authors": [
+    "moznion <moznion@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vue": "~0.10.6",
+    "jquery": "~2.1.1",
+    "lodash": "~2.4.1",
+    "bootstrap": "~3.2.0"
+  },
+  "overrides": {
+      "vue": {
+          "main": "**/*.min.js"
+      },
+      "jquery": {
+          "main": "**/*.min.js"
+      },
+      "lodash": {
+          "main": "**/*.min.js"
+      },
+      "bootstrap": {
+          "main": ["**/*.min.js", "**/*.min.css"]
+      }
+  }
+}
