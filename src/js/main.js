@@ -1,42 +1,47 @@
 $(function () {
-  var vm = new Vue({
-      el: '#main',
-      data: {
-          'logs': {},
-          'Object': Object,
-      },
-      methods: {
-          getPretty: function () {
-              var self = this;
-              var data = self.$data;
+    /* global WireLogParser:false */
+    'use strict';
 
-              var wireLogParser = new WireLogParser();
+    var vm = new Vue({
+        el: '#main',
+        data: {
+            'logs': {},
+            'Object': Object,
+        },
+        methods: {
+            getPretty: function () {
+                var self = this;
+                var data = self.$data;
 
-              var logs = {};
-              _(wireLogParser.parse(data.wireLog)).forEach(function (log, index) {
-                  if (log.isEmpty()) {
-                      return;
-                  }
+                var wireLogParser = new WireLogParser();
 
-                  var requestLog = '';
-                  var responseLog = '';
+                var logs = {};
+                _(wireLogParser.parse(data.wireLog)).forEach(function (log, index) {
+                    if (log.isEmpty()) {
+                        return;
+                    }
 
-                  if (!log.requestLog.isEmpty()) {
-                      requestLog = log.requestLog.toString();
-                  }
+                    var requestLog = '';
+                    var responseLog = '';
 
-                  if (!log.responseLog.isEmpty()) {
-                      responseLog = log.responseLog.toString();
-                  }
+                    if (!log.requestLog.isEmpty()) {
+                        requestLog = log.requestLog.toString();
+                    }
 
-                  logs[index] = {
-                      'requestLog': requestLog,
-                      'responseLog': responseLog
-                  };
-              });
-              data.logs = logs;
-          }
-      }
-  });
+                    if (!log.responseLog.isEmpty()) {
+                        responseLog = log.responseLog.toString();
+                    }
+
+                    logs[index] = {
+                        'requestLog': requestLog,
+                        'responseLog': responseLog
+                    };
+                });
+                data.logs = logs;
+            }
+        }
+    });
+
+    return vm;
 });
 

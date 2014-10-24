@@ -30,7 +30,7 @@ var WireLogParser = (function () {
             var i;
 
             for (i = 0; i < logsLength; i++) {
-                str += this.logs[i].log + "\n";
+                str += this.logs[i].log + '\n';
             }
 
             return str;

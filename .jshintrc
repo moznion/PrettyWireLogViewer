@@ -66,7 +66,6 @@
   // JavaScript libraries and runtime environments—such as browser or node.js.
   // Essentially they are shortcuts for explicit declarations like
   // /*global $:false, jQuery:false */
-
   "browser":        true,   //defines globals exposed by modern browsers
   "couch":          false,  //defines globals exposed by CouchDB
   "devel":          true,   //defines globals that are usually used for logging poor-man's debugging: `console`, `alert`, etc.
@@ -81,6 +80,12 @@
   "worker":         true,   //defines globals available when your code is running inside of a Web Worker
   "wsh":            false,  //defines globals available when your code is running as a script for the Windows Script Host
   "yui":            false,  //defines globals exposed by the YUI JavaScript framework
+
+  "globals": {
+    "Vue": false,
+    "_": false
+  },
+
 
   // LEGACY
   // These options are legacy from JSLint. Aside from bug fixes they will not
