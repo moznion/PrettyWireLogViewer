@@ -1,4 +1,4 @@
-PrettyWireLogViewer
+PrettyWireLogViewer [![Build Status](https://travis-ci.org/moznion/PrettyWireLogViewer.svg)](https://travis-ci.org/moznion/PrettyWireLogViewer)
 ===================
 
 Pretty viewer for wire logging of Apache HttpClient
