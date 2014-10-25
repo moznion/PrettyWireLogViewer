@@ -1,4 +1,4 @@
-$(function () {
+(function () {
     /* global WireLogParser:false */
     'use strict';
 
@@ -46,5 +46,5 @@ $(function () {
     });
 
     return vm;
-});
+}());
 
