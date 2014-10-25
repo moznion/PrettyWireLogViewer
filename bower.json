@@ -13,7 +13,7 @@
     "tests"
   ],
   "dependencies": {
-    "vue": "~0.10.6",
+    "vue": "0.11.0-rc3",
     "jquery": "~2.1.1",
     "lodash": "~2.4.1",
     "bootstrap": "~3.2.0"
