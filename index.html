@@ -23,7 +23,7 @@
         Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
       </p>
 
-      <textarea id="wire-log" class="form-control" rows="15" placeholder="Log" v-model="wireLog" v-on="keyup: getPretty"></textarea>
+      <textarea id="wire-log" class="form-control" rows="15" v-model="wireLog" v-on="keyup: getPretty"></textarea>
 
       <div v-repeat="logs">
         <h1>・{{$key}}</h1>
