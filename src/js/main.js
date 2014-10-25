@@ -16,10 +16,11 @@ $(function () {
                 _(Object.keys(data.logs)).forEach(function (key) {
                     data.logs.$delete(key);
                 });
+
                 var wireLogParser = new WireLogParser();
 
                 var logs = {};
-                _(wireLogParser.parse(data.wireLog)).forEach(function (log, index) {
+                _(wireLogParser.parse(data.wireLog)).forEach(function (log, key) {
                     if (log.isEmpty()) {
                         return;
                     }
@@ -35,12 +36,11 @@ $(function () {
                         responseLog = log.responseLog.toString();
                     }
 
-                    logs[index] = {
+                    data.logs.$add(key, {
                         'requestLog': requestLog,
                         'responseLog': responseLog
-                    };
+                    });
                 });
-                data.logs = logs;
             }
         }
     });
