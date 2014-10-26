@@ -94,10 +94,6 @@ var WireLogParser = (function () {
                 logContainer = args.logContainer,
                 direction = args.direction;
 
-            if (self.doesRemoveNewLine === true) {
-                log = removeNewLine(log);
-            }
-
             var type = 'body';
 
             // init (at the 1st line of request or response)
@@ -126,12 +122,18 @@ var WireLogParser = (function () {
             });
         };
 
-        var requestLogByGroup = [];
-        var responseLogByGroup = [];
+        var requestLogByGroup = {};
+        var responseLogByGroup = {};
 
         var line, lineNum, found;
         var lines = logText.split(/\r?\n/);
         var numOfLines = lines.length;
+
+        var group, connection, entity;
+
+        var usedConnections = {};
+        var connection2group = {};
+
         for (lineNum = 0; lineNum < numOfLines; lineNum++) {
             line = lines[lineNum];
 
@@ -143,10 +145,30 @@ var WireLogParser = (function () {
             // for request
             found = line.match(/.*http-outgoing-([0-9]+) >> ("?)(.*)\2/);
             if (found) {
+                connection = found[1];
+                entity = found[3];
+
+                if (this.doesRemoveNewLine === true) {
+                    entity = removeNewLine(entity);
+                }
+
+                if (
+                    typeof usedConnections[connection] === 'undefined' || // when using connection for first time
+                    usedConnections[connection] === true                  // when reusing connection
+                ) {
+                    group = entity;
+                    usedConnections[connection] = false;
+                    connection2group[connection] = group;
+
+                    // initialize
+                    requestLogByGroup[group] = undefined;
+                    responseLogByGroup[group] = undefined;
+                }
+
                 assembleLogObj({
                     'self': this,
-                    'log': found[3],
-                    'group': found[1],
+                    'log': entity,
+                    'group': connection2group[connection],
                     'logContainer': requestLogByGroup,
                     'direction': 'request'
                 });
@@ -156,10 +178,20 @@ var WireLogParser = (function () {
             // for response
             found = line.match(/.*http-outgoing-([0-9]+) << ("?)(.*)\2/);
             if (found) {
+                connection = found[1];
+                entity = found[3];
+
+                if (this.doesRemoveNewLine === true) {
+                    entity = removeNewLine(entity);
+                }
+
+                // to support to reuse connection
+                usedConnections[connection] = true;
+
                 assembleLogObj({
                     'self': this,
-                    'log': found[3],
-                    'group': found[1],
+                    'log': entity,
+                    'group': connection2group[connection],
                     'logContainer': responseLogByGroup,
                     'direction': 'response'
                 });
@@ -167,18 +199,17 @@ var WireLogParser = (function () {
             }
         }
 
-        var numOfLog = requestLogByGroup.length;
-        if (numOfLog - responseLogByGroup.length < 0) {
-            numOfLog = responseLogByGroup.length;
-        }
+        var keysOfLog = Object.keys(requestLogByGroup);
+        var numOfKeys = keysOfLog.length;
 
-        var i;
-        var logs = [];
-        for (i = 0; i < numOfLog; i++) {
-            logs.push(new WireLog({
-                'requestLog': requestLogByGroup[i],
-                'responseLog': responseLogByGroup[i]
-            }));
+        var i, key;
+        var logs = {};
+        for (i = 0; i < numOfKeys; i++) {
+            key = keysOfLog[i];
+            logs[key] = new WireLog({
+                'requestLog': requestLogByGroup[key],
+                'responseLog': responseLogByGroup[key]
+            });
         }
 
         return logs;

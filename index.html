@@ -7,7 +7,6 @@
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
-    <script src="vendor/js/jquery.min.js"></script>
     <script src="vendor/js/lodash.min.js"></script>
     <script src="vendor/js/vue.min.js"></script>
     <script src="bower_components/vue/dist/vue.js">
@@ -23,7 +22,8 @@
       <p class="intro">
         Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
       </p>
-      <textarea id="wire-log" class="form-control" rows="15" placeholder="Log" v-model="wireLog">
+
+      <textarea id="wire-log" class="form-control" rows="15" v-model="wireLog" v-on="keyup: getPretty">
 17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "GET /api/foo?bar=123&buz=456 HTTP/1.1[\r][\n]"
 17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Host: 127.0.0.1:8080[\r][\n]"
 17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Connection: Keep-Alive[\r][\n]"
@@ -40,10 +40,8 @@
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "{"code":200,"messages":[],"data":{"foo":[{"bar":123,"buz":456},{"bar":321,"buz":654}]}}"
       </textarea>
 
-      <button id="pretty" class="btn btn-primary" v-on="click: getPretty">Get Pretty!</button>
-
       <div v-repeat="logs">
-        <h3>・http-outgoing-{{$key}}</h3>
+        <h1>・{{$key}}</h1>
         <table class="result">
           <tr>
             <th>Request</th>
