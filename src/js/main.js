@@ -14,7 +14,6 @@
 
             var wireLogParser = new WireLogParser();
 
-            var logs = {};
             _(wireLogParser.parse(data.wireLog)).forEach(function (log, key) {
                 if (log.isEmpty()) {
                     return;

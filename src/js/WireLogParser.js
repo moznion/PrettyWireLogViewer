@@ -88,8 +88,7 @@ var WireLogParser = (function () {
         };
 
         var assembleLogObj = function (args) {
-            var self = args.self,
-                log = args.log,
+            var log = args.log,
                 group = args.group,
                 logContainer = args.logContainer,
                 direction = args.direction;
@@ -166,7 +165,6 @@ var WireLogParser = (function () {
                 }
 
                 assembleLogObj({
-                    'self': this,
                     'log': entity,
                     'group': connection2group[connection],
                     'logContainer': requestLogByGroup,
@@ -189,7 +187,6 @@ var WireLogParser = (function () {
                 usedConnections[connection] = true;
 
                 assembleLogObj({
-                    'self': this,
                     'log': entity,
                     'group': connection2group[connection],
                     'logContainer': responseLogByGroup,
