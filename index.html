@@ -18,12 +18,15 @@
 
   <body>
     <div id="main">
-      <h1 class="main-title">Pretty Wire Log Viewer</h1>
+      <h1>Pretty Wire Log Viewer <a href="http://github.com/moznion/PrettyWireLogViewer" target="_blank"><img src="vendor/img/github-log.png" alt="github logo" width="33"></a></h1>
       <p class="intro">
         Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
       </p>
+      <hr>
 
-      <textarea id="wire-log" class="form-control" rows="15" v-model="wireLog" v-on="keyup: getPretty">
+      <div id="left">
+        <h3>Input</h3>
+        <textarea id="wire-log" class="form-control" v-model="wireLog" v-on="keyup: getPretty">
 17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "GET /api/foo?bar=123&buz=456 HTTP/1.1[\r][\n]"
 17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Host: 127.0.0.1:8080[\r][\n]"
 17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Connection: Keep-Alive[\r][\n]"
@@ -38,24 +41,14 @@
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "Server: Jetty(9.2.3.v20140905)[\r][\n]"
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "[\r][\n]"
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "{"code":200,"messages":[],"data":{"foo":[{"bar":123,"buz":456},{"bar":321,"buz":654}]}}"
-      </textarea>
+        </textarea>
+      </div>
 
-      <div v-repeat="logs">
-        <h1>・{{$key}}</h1>
-        <table class="result">
-          <tr>
-            <th>Request</th>
-            <th>Response</th>
-          </tr>
-          <tr>
-            <td>
-              <textarea class="result" rows=10 readonly>{{ requestLog }}</textarea>
-            </td>
-            <td>
-              <textarea class="result" rows=10 readonly>{{ responseLog }}</textarea>
-            </td>
-          </tr>
-        </table>
+      <div id="right">
+        <div v-repeat="logs">
+          <h3>{{ $key }}</h3>
+          <textarea class="result" rows=15 readonly>{{ $value }}</textarea>
+        </div>
       </div>
     </div>
 
