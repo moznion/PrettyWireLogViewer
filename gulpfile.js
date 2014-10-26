@@ -33,5 +33,6 @@ gulp.task('bower', ['cleanup-vendor'], function () {
 });
 
 gulp.task('cleanup-vendor', function () {
-    del.sync('vendor/');
+    del.sync('vendor/js');
+    del.sync('vendor/css');
 });
