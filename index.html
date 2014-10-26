@@ -17,48 +17,25 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="header">
-        <h1>Pretty Wire Log Viewer</h1>
-        <p class="intro">
-          Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
-        </p>
-      </div>
-      <div class="left">
-        <div id="foo">
-          <h3>Input<h3>
-        </div>
+    <div id="main">
+      <h1>Pretty Wire Log Viewer <a href="http://github.com/moznion/PrettyWireLogViewer" target="_blank"><img src="vendor/img/github-log.png" alt="github logo" width="33"></a></h1>
+      <p class="intro">
+        Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
+      </p>
+      <hr>
+
+      <div id="left">
+        <h3>Input</h3>
         <textarea id="wire-log" class="form-control" v-model="wireLog" v-on="keyup: getPretty"></textarea>
       </div>
+
       <div id="right">
-        <h1>Pretty Wire Log Viewer</h1>
+        <div v-repeat="logs">
+          <h3>{{$key}}</h3>
+          <textarea class="result" rows=10 readonly>{{ requestLog }}</textarea>
+        </div>
       </div>
     </div>
-
-    <!-- <div id="main"> -->
-    <!--   <h1 class="main&#45;title">Pretty Wire Log Viewer</h1> -->
-    <!--   <h1>Pretty Wire Log Viewer</h1> -->
-    <!--  -->
-    <!--   <textarea id="wire&#45;log" class="form&#45;control" rows="15" v&#45;model="wireLog" v&#45;on="keyup: getPretty"></textarea> -->
-    <!--  -->
-    <!--   <div v&#45;repeat="logs"> -->
-    <!--     <h1>・{{$key}}</h1> -->
-    <!--     <table class="result"> -->
-    <!--       <tr> -->
-    <!--         <th>Request</th> -->
-    <!--         <th>Response</th> -->
-    <!--       </tr> -->
-    <!--       <tr> -->
-    <!--         <td> -->
-    <!--           <textarea class="result" rows=10 readonly>{{ requestLog }}</textarea> -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--           <textarea class="result" rows=10 readonly>{{ responseLog }}</textarea> -->
-    <!--         </td> -->
-    <!--       </tr> -->
-    <!--     </table> -->
-    <!--   </div> -->
-    <!-- </div> -->
 
     <script src="src/js/main.js"></script>
   </body>

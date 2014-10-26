@@ -1,101 +1,32 @@
-/* p.intro { */
-/*   font-size: 20px; */
-/*   text-align: center; */
-/* } */
-
-/* #main { */
-/*   width: 80%; */
-/*   margin: 0px auto 0px auto; */
-/* } */
-
-/* h1.main-title { */
-/*   font-size: 60px; */
-/*   text-align: center; */
-/* } */
-/*  */
-/* button.btn { */
-/*   width: 100%; */
-/*   letter-spacing: 0.2em; */
-/* } */
-/*  */
-/*  */
-/* table.result { */
-/*   width: 100%; */
-/*   table-layout: auto; */
-/* } */
-/*  */
-/* table.result tr td{ */
-/*   width:100px; */
-/* } */
-/*  */
-/* textarea.result { */
-/*   width:100%; */
-/*   height:100%; */
-/* } */
-
-/* .container { */
-/*    height: 100%; */
-/*    overflow: hidden; */
-/* } */
-
-/* html, body { */
-/*     height: 100%; */
-/*     /* padding: 0px; */ */
-/*     /* margin: 0px; */ */
-/*     /* background-color: white; */ */
-/* } */
-
-/* #over { */
-/*     height: auto; */
-/*     min-height: calc(100% - 150px); */
-/* } */
-
-/* #head { */
-/*     height: 100px; */
-/*     width: 100%; */
-/*         background-color: #D1C5C5; */
-/* } */
-/*  */
-/* #main-foot { */
-/*     clear: both; */
-/*     width: 100%; */
-/*     height: 50px; */
-/* } */
-
-/* textarea { */
-/*   width:100%; */
-/*   height:100%; */
-/* } */
-* {
-  margin: 0;
+html, body, #main {
+  height: 90%;
 }
 
-html, body, .container {
+p.intro {
+  font-size: 15px;
+}
+
+#left {
+  float: left;
+  width: 50%;
   height: 100%;
 }
 
-div.header {
-  height: 10%;
-}
-
-#foo {
-  height: 200%;
-}
-
-div.left {
-  float: left;
-  max-height: 90%;
-  width: 50%;
-  bottom: 45px;
-}
-
 #right {
-    float: left;
-    width: 50%;
-    background-color: #AFC9B0;
+  float: left;
+  width: 50%;
+  height: 100%;
+  overflow-y: scroll;
 }
 
-textarea.form-control {
-  height: 60vh;
+#wire-log {
+  max-height: 100%;
+  min-height: 100%;
+  max-width: 100%;
+  min-width: 100%;
 }
 
+textarea.result {
+  max-width: 100%;
+  min-width: 100%;
+}
