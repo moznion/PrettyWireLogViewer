@@ -31,10 +31,10 @@
                     responseLog = log.responseLog.toString();
                 }
 
-                data.logs.$add(key, {
-                    'requestLog': requestLog,
-                    'responseLog': responseLog
-                });
+                var logText = '>>>>>>>> REQUEST\n' + requestLog +
+                              '<<<<<<<< RESPONSE\n' + responseLog;
+
+                data.logs.$add(key, logText);
             });
         };
 

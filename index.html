@@ -31,8 +31,8 @@
 
       <div id="right">
         <div v-repeat="logs">
-          <h3>{{$key}}</h3>
-          <textarea class="result" rows=10 readonly>{{ requestLog }}</textarea>
+          <h3>{{ $key }}</h3>
+          <textarea class="result" rows=15 readonly>{{ $value }}</textarea>
         </div>
       </div>
     </div>
