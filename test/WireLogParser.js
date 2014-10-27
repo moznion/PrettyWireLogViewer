@@ -96,7 +96,10 @@ var logTextReUsed = heredoc(function () {/*
 describe('WireLogParser', function () {
     describe('#parse', function () {
         describe('parse simple log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextSimply);
             it('should parse rightly', function () {
                 Object.keys(parsed).length.should.equal(1);
@@ -192,7 +195,10 @@ Server: Jetty(9.2.3.v20140905)
         });
 
         describe('parse mixed multi log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextMixed);
             it('should parse rightly', function () {
                 Object.keys(parsed).length.should.equal(2);
@@ -371,7 +377,10 @@ Server: Jetty(9.2.3.v20140905)
         });
 
         describe('lacked log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextLacked);
             it('should check empty or not rightly', function () {
                 parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].isEmpty().should.equal(false);
@@ -381,7 +390,10 @@ Server: Jetty(9.2.3.v20140905)
         });
 
         describe('connection reusing log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextReUsed);
 
             it('should parse rightly', function () {
