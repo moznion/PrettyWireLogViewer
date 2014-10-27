@@ -1,16 +1,35 @@
 var WireLogParser = (function () {
     'use strict';
 
-    function WireLogParser(doesRemoveNewLine) {
-        if (doesRemoveNewLine !== false) {
-            doesRemoveNewLine = true;
+    function WireLogParser(arg) {
+        var doesRemoveNewLine = arg.doesRemoveNewLine,
+            bePrettyJSON = arg.bePrettyJSON;
+
+        if (doesRemoveNewLine !== true) {
+            doesRemoveNewLine = false;
         }
+
+        if (bePrettyJSON !== true) {
+            bePrettyJSON = false;
+        }
+
         this.doesRemoveNewLine = doesRemoveNewLine;
+        this.bePrettyJSON = bePrettyJSON;
     }
 
+    var reContentTypeHeader = new RegExp('^content-type$', 'i');
+    var reContentTypeJSON = new RegExp('application/json', 'i');
+
     var WireLogUnit = (function () {
-        function WireLogUnit() {
+        function WireLogUnit(arg) {
             this.logs = [];
+
+            this.bePrettyJSON = true;
+            if (arg.bePrettyJSON !== true) {
+                this.bePrettyJSON = false;
+            }
+
+            this.isContentTypeJSON = false;
         }
 
         WireLogUnit.prototype.add = function (arg) {
@@ -20,6 +39,13 @@ var WireLogParser = (function () {
             };
             if (arg.headerName) {
                 log.headerName = arg.headerName;
+
+                if (
+                    log.headerName.match(reContentTypeHeader) &&
+                    arg.log.match(reContentTypeJSON)
+                ) {
+                    this.isContentTypeJSON = true;
+                }
             }
             this.logs.push(log);
         };
@@ -27,10 +53,19 @@ var WireLogParser = (function () {
         WireLogUnit.prototype.toString = function () {
             var str = '';
             var logsLength = this.logs.length;
-            var i;
+            var i, line;
 
             for (i = 0; i < logsLength; i++) {
-                str += this.logs[i].log + '\n';
+                line = this.logs[i].log;
+                if (this.bePrettyJSON && this.isContentTypeJSON && this.logs[i].type === 'body') {
+                    try {
+                        line = JSON.stringify(JSON.parse(line), null, '    '); // 4 spaces indentation
+                    } catch (e) {
+                        // NOP
+                    }
+                }
+
+                str += line + '\n';
             }
 
             return str;
@@ -45,21 +80,21 @@ var WireLogParser = (function () {
 
     var WireLog = (function () {
         function WireLog(arg) {
-            var requestLog = arg.requestLog;
-            var responseLog = arg.responseLog;
+            var requestLog = arg.requestLog,
+                responseLog = arg.responseLog;
 
             if (
                 typeof requestLog === 'undefined' ||
                 !(requestLog instanceof WireLogUnit)
             ) {
-                requestLog = new WireLogUnit();
+                requestLog = new WireLogUnit({});
             }
 
             if (
                 typeof responseLog === 'undefined' ||
                 !(responseLog instanceof WireLogUnit)
             ) {
-                responseLog = new WireLogUnit();
+                responseLog = new WireLogUnit({});
             }
 
             this.requestLog = requestLog;
@@ -87,6 +122,8 @@ var WireLogParser = (function () {
             return log.replace(/(\[\\r\])?\[\\n\]/, ''); // remove string like so "[\r][\n]"
         };
 
+        var self = this;
+
         var assembleLogObj = function (args) {
             var log = args.log,
                 group = args.group,
@@ -97,7 +134,7 @@ var WireLogParser = (function () {
 
             // init (at the 1st line of request or response)
             if (typeof logContainer[group] === 'undefined') {
-                logContainer[group] = new WireLogUnit();
+                logContainer[group] = new WireLogUnit({'bePrettyJSON': self.bePrettyJSON});
                 type = 'http-' + direction;
             }
 
