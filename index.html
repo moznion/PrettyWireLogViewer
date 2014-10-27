@@ -18,11 +18,22 @@
 
   <body>
     <div id="main">
-      <h1>Pretty Wire Log Viewer <a href="http://github.com/moznion/PrettyWireLogViewer" target="_blank"><img src="vendor/img/github-log.png" alt="github logo" width="33"></a></h1>
-      <p class="intro">
-        Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
-      </p>
-      <hr>
+      <div id="header">
+        <h1>Pretty Wire Log Viewer <a href="http://github.com/moznion/PrettyWireLogViewer" target="_blank"><img src="vendor/img/github-log.png" alt="github logo" width="33"></a></h1>
+        <p class="intro">
+          Pretty viewer for wire logging of Apache <a href="http://hc.apache.org/httpclient-3.x/" target="_blank">HttpClient</a>
+        </p>
+
+        <hr>
+
+        <div class="pretty-json-toggle">
+          <input type="checkbox" name="pretty-json-toggle" class="pretty-json-toggle-checkbox" id="pretty-json" v-model="prettyJSON" v-on="change: getPretty">
+          <label class="pretty-json-toggle-label" for="pretty-json">
+            <span class="pretty-json-toggle-inner"></span>
+            <span class="pretty-json-toggle-switch"></span>
+          </label>
+        </div>
+      </div>
 
       <div id="left">
         <h3>Input</h3>

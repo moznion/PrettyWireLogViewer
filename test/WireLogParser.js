@@ -96,7 +96,10 @@ var logTextReUsed = heredoc(function () {/*
 describe('WireLogParser', function () {
     describe('#parse', function () {
         describe('parse simple log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextSimply);
             it('should parse rightly', function () {
                 Object.keys(parsed).length.should.equal(1);
@@ -192,7 +195,10 @@ Server: Jetty(9.2.3.v20140905)
         });
 
         describe('parse mixed multi log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextMixed);
             it('should parse rightly', function () {
                 Object.keys(parsed).length.should.equal(2);
@@ -371,7 +377,10 @@ Server: Jetty(9.2.3.v20140905)
         });
 
         describe('lacked log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextLacked);
             it('should check empty or not rightly', function () {
                 parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].isEmpty().should.equal(false);
@@ -381,7 +390,10 @@ Server: Jetty(9.2.3.v20140905)
         });
 
         describe('connection reusing log', function () {
-            var p = new parser.WireLogParser();
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': false,
+            });
             var parsed = p.parse(logTextReUsed);
 
             it('should parse rightly', function () {
@@ -537,6 +549,48 @@ Content-Length: 36
 Server: Jetty(9.2.3.v20140905)
 
 {"code":200,"messages":[],"data":{}}
+                */}));
+            });
+        });
+
+        describe('parse simple log with pretty JSON mode', function () {
+            var p = new parser.WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': true,
+            });
+            it('should to be string rightly pretty', function () {
+                var parsed = p.parse(logTextSimply);
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].requestLog.toString().should.equal(heredoc(function () {/*
+GET /api/foo?bar=123&buz=456 HTTP/1.1
+Host: 127.0.0.1:8080
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.3.5 (java 1.5)
+Accept-Encoding: gzip,deflate
+
+                */}));
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].responseLog.toString().should.equal(heredoc(function () {/*
+HTTP/1.1 200 OK
+Date: Mon, 20 Oct 2014 08:25:27 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 87
+Server: Jetty(9.2.3.v20140905)
+
+{
+    "code": 200,
+    "messages": [],
+    "data": {
+        "foo": [
+            {
+                "bar": 123,
+                "buz": 456
+            },
+            {
+                "bar": 321,
+                "buz": 654
+            }
+        ]
+    }
+}
                 */}));
             });
         });
