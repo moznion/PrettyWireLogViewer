@@ -1,4 +1,6 @@
 html, body, #main {
+  margin-left: 20px;
+  margin-right: 20px;
   height: 90%;
 }
 
@@ -29,4 +31,55 @@ p.intro {
 textarea.result {
   max-width: 100%;
   min-width: 100%;
+}
+
+.pretty-json-toggle {
+    position: relative; width: 118px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.pretty-json-toggle-checkbox {
+    display: none;
+}
+.pretty-json-toggle-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 5px;
+}
+.pretty-json-toggle-inner {
+    display: block; width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+.pretty-json-toggle-inner:before, .pretty-json-toggle-inner:after {
+    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+.pretty-json-toggle-inner:before {
+    content: "Pretty JSON";
+    padding-left: 10px;
+    background-color: #1092DE; color: #FFFFFF;
+}
+.pretty-json-toggle-inner:after {
+    content: "Raw JSON";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.pretty-json-toggle-switch {
+    display: block; width: 15px; margin: 0px;
+    background: #FFFFFF;
+    border: 2px solid #999999; border-radius: 5px;
+    position: absolute; top: 0; bottom: 0; right: 99px;
+    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s;
+    background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+}
+.pretty-json-toggle-checkbox:checked + .pretty-json-toggle-label .pretty-json-toggle-inner {
+    margin-left: 0;
+}
+.pretty-json-toggle-checkbox:checked + .pretty-json-toggle-label .pretty-json-toggle-switch {
+    right: 0px;
 }

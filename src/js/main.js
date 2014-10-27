@@ -12,7 +12,10 @@
                 data.logs.$delete(key);
             });
 
-            var wireLogParser = new WireLogParser();
+            var wireLogParser = new WireLogParser({
+                'doesRemoveNewLine': true,
+                'bePrettyJSON': data.prettyJSON,
+            });
 
             _(wireLogParser.parse(data.wireLog)).forEach(function (log, key) {
                 if (log.isEmpty()) {
@@ -40,7 +43,8 @@
         return new Vue({
             el: '#main',
             data: {
-                'logs': {}
+                'logs': {},
+                'prettyJSON': true
             },
             methods: {
                 getPretty: getPretty
