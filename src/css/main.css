@@ -10,15 +10,17 @@ p.intro {
 
 #left {
   float: left;
-  width: 50%;
+  width: 49%;
   height: 100%;
+  margin-right: 1%;
 }
 
 #right {
   float: left;
-  width: 50%;
+  width: 49%;
   height: 100%;
   overflow-y: scroll;
+  margin-left: 1%;
 }
 
 #wire-log {
