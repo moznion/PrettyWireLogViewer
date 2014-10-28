@@ -1,24 +1,29 @@
+var utf8 = utf8; // import from external
+
 var WireLogParser = (function () {
     'use strict';
 
     function WireLogParser(arg) {
-        var doesRemoveNewLine = arg.doesRemoveNewLine,
-            bePrettyJSON = arg.bePrettyJSON;
+        var removeNewLine = arg.removeNewLine,
+            bePrettyJSON = arg.bePrettyJSON,
+            decodeBytes = arg.decodeBytes;
 
-        if (doesRemoveNewLine !== true) {
-            doesRemoveNewLine = false;
+        if (removeNewLine !== true) {
+            removeNewLine = false;
         }
 
         if (bePrettyJSON !== true) {
             bePrettyJSON = false;
         }
 
-        this.doesRemoveNewLine = doesRemoveNewLine;
-        this.bePrettyJSON = bePrettyJSON;
-    }
+        if (decodeBytes !== true) {
+            decodeBytes = false;
+        }
 
-    var reContentTypeHeader = new RegExp('^content-type$', 'i');
-    var reContentTypeJSON = new RegExp('application/json', 'i');
+        this.removeNewLine = removeNewLine;
+        this.bePrettyJSON = bePrettyJSON;
+        this.decodeBytes = decodeBytes;
+    }
 
     var WireLogUnit = (function () {
         function WireLogUnit(arg) {
@@ -29,6 +34,11 @@ var WireLogParser = (function () {
                 this.bePrettyJSON = false;
             }
 
+            this.decodeBytes = true;
+            if (arg.decodeBytes !== true) {
+                this.decodeBytes = false;
+            }
+
             this.isContentTypeJSON = false;
         }
 
@@ -37,6 +47,10 @@ var WireLogParser = (function () {
                 'log': arg.log,
                 'type': arg.type
             };
+
+            var reContentTypeHeader = /^content-type$/i;
+            var reContentTypeJSON = /application\/json/i;
+
             if (arg.headerName) {
                 log.headerName = arg.headerName;
 
@@ -55,6 +69,25 @@ var WireLogParser = (function () {
             var logsLength = this.logs.length;
             var i, line;
 
+            var reEncodedBytes = /(?:\[0x[0-9a-f]{2}\])+/g;
+
+            var decode = function (str) {
+                var i, matches, matchesLen, byteString;
+                var reBytes = /0x[0-9a-f]{2}/g;
+                try {
+                    matches = str.match(reBytes);
+                    matchesLen = matches.length;
+                    byteString = '';
+                    for (i = 0; i < matchesLen; i++) {
+                        byteString += String.fromCharCode(parseInt(matches[i], 16));
+                    }
+
+                    return utf8.decode(byteString);
+                } catch (e) {
+                    return str;
+                }
+            };
+
             for (i = 0; i < logsLength; i++) {
                 line = this.logs[i].log;
                 if (this.bePrettyJSON && this.isContentTypeJSON && this.logs[i].type === 'body') {
@@ -63,6 +96,11 @@ var WireLogParser = (function () {
                     } catch (e) {
                         // NOP
                     }
+                }
+
+                if (this.decodeBytes) {
+                    // decode byte string to utf-8
+                    line = line.replace(reEncodedBytes, decode);
                 }
 
                 str += line + '\n';
@@ -134,7 +172,10 @@ var WireLogParser = (function () {
 
             // init (at the 1st line of request or response)
             if (typeof logContainer[group] === 'undefined') {
-                logContainer[group] = new WireLogUnit({'bePrettyJSON': self.bePrettyJSON});
+                logContainer[group] = new WireLogUnit({
+                    'bePrettyJSON': self.bePrettyJSON,
+                    'decodeBytes': self.decodeBytes
+                });
                 type = 'http-' + direction;
             }
 
@@ -163,6 +204,7 @@ var WireLogParser = (function () {
 
         var line, lineNum, found;
         var lines = logText.split(/\r?\n/);
+
         var numOfLines = lines.length;
 
         var group, connection, entity;
@@ -184,7 +226,7 @@ var WireLogParser = (function () {
                 connection = found[1];
                 entity = found[3];
 
-                if (this.doesRemoveNewLine === true) {
+                if (this.removeNewLine === true) {
                     entity = removeNewLine(entity);
                 }
 
@@ -216,7 +258,7 @@ var WireLogParser = (function () {
                 connection = found[1];
                 entity = found[3];
 
-                if (this.doesRemoveNewLine === true) {
+                if (this.removeNewLine === true) {
                     entity = removeNewLine(entity);
                 }
 
@@ -254,5 +296,6 @@ var WireLogParser = (function () {
 
 // for testing
 if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'test') {
-   exports.WireLogParser = WireLogParser;
+    exports.WireLogParser = WireLogParser;
+    utf8 = require('utf8');
 }

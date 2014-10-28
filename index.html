@@ -27,13 +27,29 @@
 
         <hr>
 
-        <div class="pretty-json-toggle">
-          <input type="checkbox" name="pretty-json-toggle" class="pretty-json-toggle-checkbox" id="pretty-json" v-model="prettyJSON" v-on="change: getPretty">
-          <label class="pretty-json-toggle-label" for="pretty-json">
-            <span class="pretty-json-toggle-inner"></span>
-            <span class="pretty-json-toggle-switch"></span>
-          </label>
-        </div>
+        <table>
+          <tr>
+            <td style="padding: 0px 6px 0px 0px;">
+              <div class="pretty-json-toggle">
+                <input type="checkbox" name="pretty-json-toggle" class="pretty-json-toggle-checkbox" id="pretty-json" v-model="prettyJSON" v-on="change: getPretty">
+                <label class="pretty-json-toggle-label" for="pretty-json">
+                  <span class="pretty-json-toggle-inner"></span>
+                  <span class="pretty-json-toggle-switch"></span>
+                </label>
+              </div>
+            </td>
+
+            <td style="padding: 0px 0px 0px 6px;">
+              <div class="decode-bytes-toggle">
+                <input type="checkbox" name="decode-bytes-toggle" class="decode-bytes-toggle-checkbox" id="decode-bytes" v-model="decodeBytes" v-on="change: getPretty">
+                <label class="decode-bytes-toggle-label" for="decode-bytes">
+                  <span class="decode-bytes-toggle-inner"></span>
+                  <span class="decode-bytes-toggle-switch"></span>
+                </label>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div id="left">
