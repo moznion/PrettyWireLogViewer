@@ -3,7 +3,8 @@ var WireLogParser = (function () {
 
     function WireLogParser(arg) {
         var removeNewLine = arg.removeNewLine,
-            bePrettyJSON = arg.bePrettyJSON;
+            bePrettyJSON = arg.bePrettyJSON,
+            decodeBytes = arg.decodeBytes;
 
         if (removeNewLine !== true) {
             removeNewLine = false;
@@ -13,12 +14,14 @@ var WireLogParser = (function () {
             bePrettyJSON = false;
         }
 
+        if (decodeBytes !== true) {
+            decodeBytes = false;
+        }
+
         this.removeNewLine = removeNewLine;
         this.bePrettyJSON = bePrettyJSON;
+        this.decodeBytes = decodeBytes;
     }
-
-    var reContentTypeHeader = new RegExp('^content-type$', 'i');
-    var reContentTypeJSON = new RegExp('application/json', 'i');
 
     var WireLogUnit = (function () {
         function WireLogUnit(arg) {
@@ -29,6 +32,11 @@ var WireLogParser = (function () {
                 this.bePrettyJSON = false;
             }
 
+            this.decodeBytes = true;
+            if (arg.decodeBytes !== true) {
+                this.decodeBytes = false;
+            }
+
             this.isContentTypeJSON = false;
         }
 
@@ -37,6 +45,10 @@ var WireLogParser = (function () {
                 'log': arg.log,
                 'type': arg.type
             };
+
+            var reContentTypeHeader = /^content-type$/i;
+            var reContentTypeJSON = /application\/json/i;
+
             if (arg.headerName) {
                 log.headerName = arg.headerName;
 
@@ -55,6 +67,9 @@ var WireLogParser = (function () {
             var logsLength = this.logs.length;
             var i, line;
 
+            var reEncodedBytes = /(?:\[0x[0-9a-f]{2}\])+/g;
+            var reBytes = /0x[0-9a-f]{2}/g;
+
             for (i = 0; i < logsLength; i++) {
                 line = this.logs[i].log;
                 if (this.bePrettyJSON && this.isContentTypeJSON && this.logs[i].type === 'body') {
@@ -63,6 +78,26 @@ var WireLogParser = (function () {
                     } catch (e) {
                         // NOP
                     }
+                }
+
+                if (this.decodeBytes) {
+                    // decode byte string to utf-8
+                    line = line.replace(reEncodedBytes, function (str) {
+                        try {
+                            var matches = str.match(reBytes),
+                                matchesLen = matches.length,
+                                byteString = '';
+
+                            var i;
+                            for (i = 0; i < matchesLen; i++) {
+                                byteString += String.fromCharCode(parseInt(matches[i], 16));
+                            }
+
+                            return utf8.decode(byteString);
+                        } catch (e) {
+                            return str;
+                        }
+                    });
                 }
 
                 str += line + '\n';
@@ -134,7 +169,10 @@ var WireLogParser = (function () {
 
             // init (at the 1st line of request or response)
             if (typeof logContainer[group] === 'undefined') {
-                logContainer[group] = new WireLogUnit({'bePrettyJSON': self.bePrettyJSON});
+                logContainer[group] = new WireLogUnit({
+                    'bePrettyJSON': self.bePrettyJSON,
+                    'decodeBytes': self.decodeBytes
+                });
                 type = 'http-' + direction;
             }
 
@@ -163,6 +201,7 @@ var WireLogParser = (function () {
 
         var line, lineNum, found;
         var lines = logText.split(/\r?\n/);
+
         var numOfLines = lines.length;
 
         var group, connection, entity;
