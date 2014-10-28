@@ -97,7 +97,7 @@ describe('WireLogParser', function () {
     describe('#parse', function () {
         describe('parse simple log', function () {
             var p = new parser.WireLogParser({
-                'doesRemoveNewLine': true,
+                'removeNewLine': true,
                 'bePrettyJSON': false,
             });
             var parsed = p.parse(logTextSimply);
@@ -196,7 +196,7 @@ Server: Jetty(9.2.3.v20140905)
 
         describe('parse mixed multi log', function () {
             var p = new parser.WireLogParser({
-                'doesRemoveNewLine': true,
+                'removeNewLine': true,
                 'bePrettyJSON': false,
             });
             var parsed = p.parse(logTextMixed);
@@ -378,7 +378,7 @@ Server: Jetty(9.2.3.v20140905)
 
         describe('lacked log', function () {
             var p = new parser.WireLogParser({
-                'doesRemoveNewLine': true,
+                'removeNewLine': true,
                 'bePrettyJSON': false,
             });
             var parsed = p.parse(logTextLacked);
@@ -391,7 +391,7 @@ Server: Jetty(9.2.3.v20140905)
 
         describe('connection reusing log', function () {
             var p = new parser.WireLogParser({
-                'doesRemoveNewLine': true,
+                'removeNewLine': true,
                 'bePrettyJSON': false,
             });
             var parsed = p.parse(logTextReUsed);
@@ -555,7 +555,7 @@ Server: Jetty(9.2.3.v20140905)
 
         describe('parse simple log with pretty JSON mode', function () {
             var p = new parser.WireLogParser({
-                'doesRemoveNewLine': true,
+                'removeNewLine': true,
                 'bePrettyJSON': true,
             });
             it('should to be string rightly pretty', function () {

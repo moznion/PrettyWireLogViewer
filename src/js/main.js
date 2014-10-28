@@ -13,7 +13,7 @@
             });
 
             var wireLogParser = new WireLogParser({
-                'doesRemoveNewLine': true,
+                'removeNewLine': true,
                 'bePrettyJSON': data.prettyJSON,
             });
 

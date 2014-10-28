@@ -2,18 +2,18 @@ var WireLogParser = (function () {
     'use strict';
 
     function WireLogParser(arg) {
-        var doesRemoveNewLine = arg.doesRemoveNewLine,
+        var removeNewLine = arg.removeNewLine,
             bePrettyJSON = arg.bePrettyJSON;
 
-        if (doesRemoveNewLine !== true) {
-            doesRemoveNewLine = false;
+        if (removeNewLine !== true) {
+            removeNewLine = false;
         }
 
         if (bePrettyJSON !== true) {
             bePrettyJSON = false;
         }
 
-        this.doesRemoveNewLine = doesRemoveNewLine;
+        this.removeNewLine = removeNewLine;
         this.bePrettyJSON = bePrettyJSON;
     }
 
@@ -184,7 +184,7 @@ var WireLogParser = (function () {
                 connection = found[1];
                 entity = found[3];
 
-                if (this.doesRemoveNewLine === true) {
+                if (this.removeNewLine === true) {
                     entity = removeNewLine(entity);
                 }
 
@@ -216,7 +216,7 @@ var WireLogParser = (function () {
                 connection = found[1];
                 entity = found[3];
 
-                if (this.doesRemoveNewLine === true) {
+                if (this.removeNewLine === true) {
                     entity = removeNewLine(entity);
                 }
 
