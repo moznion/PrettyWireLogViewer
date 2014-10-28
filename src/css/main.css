@@ -31,8 +31,8 @@ p.intro {
 }
 
 textarea.result {
-  max-width: 100%;
-  min-width: 100%;
+  max-width: 95%;
+  min-width: 95%;
 }
 
 .pretty-json-toggle {
