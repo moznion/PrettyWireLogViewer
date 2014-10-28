@@ -44,7 +44,7 @@
             el: '#main',
             data: {
                 'logs': {},
-                'prettyJSON': true
+                'prettyJSON': false
             },
             methods: {
                 getPretty: getPretty
