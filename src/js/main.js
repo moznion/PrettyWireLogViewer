@@ -15,6 +15,7 @@
             var wireLogParser = new WireLogParser({
                 'removeNewLine': true,
                 'bePrettyJSON': data.prettyJSON,
+                'decodeBytes': data.decodeBytes,
             });
 
             _(wireLogParser.parse(data.wireLog)).forEach(function (log, key) {
@@ -44,7 +45,8 @@
             el: '#main',
             data: {
                 'logs': {},
-                'prettyJSON': false
+                'prettyJSON': false,
+                'decodeBytes': false
             },
             methods: {
                 getPretty: getPretty
