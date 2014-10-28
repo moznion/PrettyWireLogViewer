@@ -1,5 +1,6 @@
 var should = require('chai').should();
 var heredoc = require('heredoc');
+var utf8 = require('utf8');
 
 var parser = require('../src/js/WireLogParser.js');
 
@@ -91,6 +92,22 @@ var logTextReUsed = heredoc(function () {/*
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "Server: Jetty(9.2.3.v20140905)[\r][\n]"
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "[\r][\n]"
 17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "{"code":200,"messages":[],"data":{}}"
+*/});
+
+var logTextContainsBytes = heredoc(function () {/*
+17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "GET /api/foo?bar=123&buz=456 HTTP/1.1[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Host: 127.0.0.1:8080[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Connection: Keep-Alive[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "Accept-Encoding: gzip,deflate[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire - http-outgoing-0 >> "[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "HTTP/1.1 200 OK[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "Date: Mon, 20 Oct 2014 08:25:27 GMT[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "Content-Type: application/json; charset=utf-8[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "Content-Length: 87[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "Server: Jetty(9.2.3.v20140905)[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire - http-outgoing-0 << "{"code":200,"messages":"[0xe5][0x86][0x86][0xe3][0x81][0x8b][0xe3][0x81][0x8b][0xe3][0x82][0x8a][0xe3][0x81][0xbe][0xe3][0x81][0x99][0xe3][0x80][0x82]"}"
 */});
 
 describe('WireLogParser', function () {
@@ -591,6 +608,34 @@ Server: Jetty(9.2.3.v20140905)
         ]
     }
 }
+                */}));
+            });
+        });
+
+        describe('parse simple log with decoding byte string', function () {
+            var p = new parser.WireLogParser({
+                'removeNewLine': true,
+                'decodeBytes': true,
+            });
+
+            it('should to be string rightly with decoding', function () {
+                var parsed = p.parse(logTextContainsBytes);
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].requestLog.toString().should.equal(heredoc(function () {/*
+GET /api/foo?bar=123&buz=456 HTTP/1.1
+Host: 127.0.0.1:8080
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.3.5 (java 1.5)
+Accept-Encoding: gzip,deflate
+
+                */}));
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].responseLog.toString().should.equal(heredoc(function () {/*
+HTTP/1.1 200 OK
+Date: Mon, 20 Oct 2014 08:25:27 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 87
+Server: Jetty(9.2.3.v20140905)
+
+{"code":200,"messages":"円かかります。"}
                 */}));
             });
         });

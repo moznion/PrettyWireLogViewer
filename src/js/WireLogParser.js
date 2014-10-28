@@ -1,3 +1,5 @@
+var utf8 = utf8; // import from external
+
 var WireLogParser = (function () {
     'use strict';
 
@@ -68,7 +70,23 @@ var WireLogParser = (function () {
             var i, line;
 
             var reEncodedBytes = /(?:\[0x[0-9a-f]{2}\])+/g;
-            var reBytes = /0x[0-9a-f]{2}/g;
+
+            var decode = function (str) {
+                var i, matches, matchesLen, byteString;
+                var reBytes = /0x[0-9a-f]{2}/g;
+                try {
+                    matches = str.match(reBytes);
+                    matchesLen = matches.length;
+                    byteString = '';
+                    for (i = 0; i < matchesLen; i++) {
+                        byteString += String.fromCharCode(parseInt(matches[i], 16));
+                    }
+
+                    return utf8.decode(byteString);
+                } catch (e) {
+                    return str;
+                }
+            };
 
             for (i = 0; i < logsLength; i++) {
                 line = this.logs[i].log;
@@ -82,22 +100,7 @@ var WireLogParser = (function () {
 
                 if (this.decodeBytes) {
                     // decode byte string to utf-8
-                    line = line.replace(reEncodedBytes, function (str) {
-                        try {
-                            var matches = str.match(reBytes),
-                                matchesLen = matches.length,
-                                byteString = '';
-
-                            var i;
-                            for (i = 0; i < matchesLen; i++) {
-                                byteString += String.fromCharCode(parseInt(matches[i], 16));
-                            }
-
-                            return utf8.decode(byteString);
-                        } catch (e) {
-                            return str;
-                        }
-                    });
+                    line = line.replace(reEncodedBytes, decode);
                 }
 
                 str += line + '\n';
@@ -293,5 +296,6 @@ var WireLogParser = (function () {
 
 // for testing
 if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'test') {
-   exports.WireLogParser = WireLogParser;
+    exports.WireLogParser = WireLogParser;
+    utf8 = require('utf8');
 }
