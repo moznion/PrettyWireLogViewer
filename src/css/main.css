@@ -48,8 +48,8 @@ textarea.result {
 }
 .pretty-json-toggle-inner {
     display: block; width: 200%; margin-left: -100%;
-    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
-    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+    -moz-transition: margin 0.1s ease-in 0s; -webkit-transition: margin 0.1s ease-in 0s;
+    -o-transition: margin 0.1s ease-in 0s; transition: margin 0.1s ease-in 0s;
 }
 .pretty-json-toggle-inner:before, .pretty-json-toggle-inner:after {
     display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
@@ -72,8 +72,8 @@ textarea.result {
     background: #FFFFFF;
     border: 2px solid #999999; border-radius: 5px;
     position: absolute; top: 0; bottom: 0; right: 99px;
-    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
-    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s;
+    -moz-transition: all 0.1s ease-in 0s; -webkit-transition: all 0.1s ease-in 0s;
+    -o-transition: all 0.1s ease-in 0s; transition: all 0.1s ease-in 0s;
     background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
     background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
     background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
@@ -99,8 +99,8 @@ textarea.result {
 }
 .decode-bytes-toggle-inner {
     display: block; width: 200%; margin-left: -100%;
-    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
-    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+    -moz-transition: margin 0.1s ease-in 0s; -webkit-transition: margin 0.1s ease-in 0s;
+    -o-transition: margin 0.1s ease-in 0s; transition: margin 0.1s ease-in 0s;
 }
 .decode-bytes-toggle-inner:before, .decode-bytes-toggle-inner:after {
     display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
@@ -123,8 +123,8 @@ textarea.result {
     background: #FFFFFF;
     border: 2px solid #999999; border-radius: 5px;
     position: absolute; top: 0; bottom: 0; right: 99px;
-    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
-    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s;
+    -moz-transition: all 0.1s ease-in 0s; -webkit-transition: all 0.1s ease-in 0s;
+    -o-transition: all 0.1s ease-in 0s; transition: all 0.1s ease-in 0s;
     background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
     background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
     background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
