@@ -13,6 +13,7 @@
     <script src="vendor/js/bootstrap.min.js"></script>
     <link href="vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="vendor/js/utf8.js"></script>
+    <script src="vendor/js/micro-location.js"></script>
     <script src="src/js/WireLogParser.js"></script>
     <link href="src/css/main.css" rel="stylesheet" type="text/css" />
   </head>
@@ -31,7 +32,7 @@
           <tr>
             <td style="padding: 0px 6px 0px 0px;" title="If you enable this, JSON body will be format pretty">
               <div class="pretty-json-toggle">
-                <input type="checkbox" name="pretty-json-toggle" class="pretty-json-toggle-checkbox" id="pretty-json" v-model="prettyJSON" v-on="change: getPretty">
+                <input type="checkbox" name="pretty-json-toggle" class="pretty-json-toggle-checkbox" id="pretty-json" v-model="prettyJSON" v-on="change: getPretty, click: changeState('prettyJSON')">
                 <label class="pretty-json-toggle-label" for="pretty-json">
                   <span class="pretty-json-toggle-inner"></span>
                   <span class="pretty-json-toggle-switch"></span>
@@ -41,7 +42,7 @@
 
             <td style="padding: 0px 0px 0px 6px;" title="If you enable this, utf-8 encoded byte string will be decoded (e.g. :'[0xe6][0x9c][0xac]' => '本')">
               <div class="decode-bytes-toggle">
-                <input type="checkbox" name="decode-bytes-toggle" class="decode-bytes-toggle-checkbox" id="decode-bytes" v-model="decodeBytes" v-on="change: getPretty">
+                <input type="checkbox" name="decode-bytes-toggle" class="decode-bytes-toggle-checkbox" id="decode-bytes" v-model="decodeBytes" v-on="change: getPretty, click: changeState('decodeBytes')">
                 <label class="decode-bytes-toggle-label" for="decode-bytes">
                   <span class="decode-bytes-toggle-inner"></span>
                   <span class="decode-bytes-toggle-switch"></span>
