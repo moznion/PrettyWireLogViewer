@@ -146,19 +146,24 @@ var WireLogParser = (function () {
         return WireLog;
     }());
 
+    var extractHeaderName = function (log) {
+        var found = log.match(/^([^:]+?):/);
+        if (found) {
+            return found[1];
+        }
+
+        return undefined;
+    };
+
+    var removeNewLine = function (log) {
+        return log.replace(/(\[\\r\])?\[\\n\]/, ''); // remove string like so "[\r][\n]"
+    };
+
     WireLogParser.prototype.parse = function (logText) {
-        var extractHeaderName = function (log) {
-            var found = log.match(/^([^:]+?):/);
-            if (found) {
-                return found[1];
-            }
-
-            return undefined;
-        };
-
-        var removeNewLine = function (log) {
-            return log.replace(/(\[\\r\])?\[\\n\]/, ''); // remove string like so "[\r][\n]"
-        };
+        if (!logText) {
+            // nothing here to process
+            return {};
+        }
 
         var self = this;
 
