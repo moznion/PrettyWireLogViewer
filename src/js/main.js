@@ -1,5 +1,5 @@
 (function () {
-    /* global WireLogParser:false */
+    /* global WireLogParser:false,Location:false */
     'use strict';
 
     var l = Location.parse(document.location.href);
