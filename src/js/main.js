@@ -72,7 +72,7 @@
                         queries.push(key + '=' + value);
                     });
 
-                    history.pushState(null,null, '?' + queries.join('&'));
+                    history.replaceState(null,null, '?' + queries.join('&'));
                 }
             },
             ready: getPretty

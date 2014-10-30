@@ -13,7 +13,7 @@ If you want to use on your local environment, please access to `index.html`.
 Requirements
 ------------
 
-- Browser which supports pushState
+- Browser which supports replaceState
 
 For Developers
 --------------
