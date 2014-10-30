@@ -10,6 +10,11 @@ Getting Started
 
 If you want to use on your local environment, please access to `index.html`.
 
+Requirements
+------------
+
+- Browser which supports pushState
+
 For Developers
 --------------
 
