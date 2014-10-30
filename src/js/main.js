@@ -1,6 +1,8 @@
 (function () {
-    /* global WireLogParser:false */
+    /* global WireLogParser:false,Location:false */
     'use strict';
+
+    var l = Location.parse(document.location.href);
 
     var vm = (function () {
         var getPretty = function () {
@@ -45,11 +47,33 @@
             el: '#main',
             data: {
                 'logs': {},
-                'prettyJSON': false,
-                'decodeBytes': false
+                'prettyJSON': l.params('prettyJSON') === 'true' ? true : false,
+                'decodeBytes': l.params('decodeBytes') === 'true' ? true : false
             },
             methods: {
-                getPretty: getPretty
+                getPretty: getPretty,
+                changeState: function (modelName) {
+                    var kv;
+                    var params = {};
+                    var search = document.location.search;
+                    if (search) {
+                        _(search.substring(1).split('&')).forEach(function (query) {
+                            kv = query.split('=');
+                            params[kv[0]] = kv[1];
+                        });
+                    }
+
+                    var data = this.$data;
+                    var flag = data[modelName];
+                    params[modelName] = flag;
+
+                    var queries = [];
+                    _(params).forEach(function (value, key) {
+                        queries.push(key + '=' + value);
+                    });
+
+                    history.pushState(null,null, '?' + queries.join('&'));
+                }
             },
             ready: getPretty
         });
