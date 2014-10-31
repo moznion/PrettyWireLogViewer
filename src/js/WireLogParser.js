@@ -45,7 +45,8 @@ var WireLogParser = (function () {
         WireLogUnit.prototype.add = function (arg) {
             var log = {
                 'log': arg.log,
-                'type': arg.type
+                'type': arg.type,
+                'direction': arg.direction
             };
 
             var reContentTypeHeader = /^content-type$/i;
@@ -200,7 +201,8 @@ var WireLogParser = (function () {
             logContainer[group].add({
                 'log': log,
                 'type': type,
-                'headerName': headerName
+                'headerName': headerName,
+                'direction': direction
             });
         };
 
