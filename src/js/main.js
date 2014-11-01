@@ -36,6 +36,7 @@
                     responseLog = log.responseLog.toString();
                 }
 
+                log.getCurlCmd();
                 var logText = '>>>>>>>> REQUEST\n' + requestLog +
                               '<<<<<<<< RESPONSE\n' + responseLog;
 

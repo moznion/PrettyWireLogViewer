@@ -44,6 +44,7 @@ var WireLogParser = (function () {
             this.httpMethod = '';
             this.endPoint = '';
             this.host = '';
+            this.postParameter = '';
         }
 
         WireLogUnit.prototype.add = function (arg) {
@@ -52,6 +53,7 @@ var WireLogParser = (function () {
                 'type': arg.type,
                 'direction': arg.direction
             };
+            var matches;
 
             if (log.type === 'header') {
                 log.headerName = arg.headerName;
@@ -68,14 +70,17 @@ var WireLogParser = (function () {
                 }
             }
             else if (log.type === 'http-request') {
-                var matches = log.log.match(/^(\S+) (\S+)/);
-                this.httpMethod = matches[1];
-                this.endPoint = matches[2];
+                matches = log.log.match(/^(\S+) (\S+)/);
+                if (matches) {
+                    this.httpMethod = matches[1];
+                    this.endPoint = matches[2];
+                }
             }
             else if (log.direction === 'request' && log.type === 'body') {
-                // if (this.httpMethod === 'POST') {
-                    // console.log('!!!!!');
-                // }
+                // extract post parameters from request body
+                if (this.httpMethod === 'POST') {
+                    this.postParameter += log.log.replace(/"/g, '\\"');
+                }
             }
 
             this.logs.push(log);
@@ -167,8 +172,21 @@ var WireLogParser = (function () {
             return this.requestLog.isEmpty() && this.responseLog.isEmpty();
         };
 
-        WireLog.prototype.getReproducibleOnCurlURL = function () {
-            // this.requestLog
+        /**
+         * Returns reproducible command which runs on curl
+         */
+        WireLog.prototype.getCurlCmd = function () {
+            var reqLog = this.requestLog;
+
+            var url = 'curl ';
+            url += reqLog.host + reqLog.endPoint + ' ';
+            url += '-X ' + reqLog.httpMethod + ' ';
+
+            if (reqLog.postParameter) {
+                url += '-d "' + reqLog.postParameter + '"';
+            }
+
+            return url;
         };
 
         return WireLog;
@@ -222,7 +240,6 @@ var WireLogParser = (function () {
                 headerName = undefined;
             }
             else if (typeof headerName !== 'undefined') {
-                console.log(log);
                 log = log.replace(/^[^:]+:\s+/, '');
                 type = 'header';
             }
