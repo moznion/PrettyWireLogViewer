@@ -128,25 +128,25 @@ describe('WireLogParser', function () {
                             'direction': 'request'
                         },
                         {
-                            'log': 'Host: 127.0.0.1:8080',
+                            'log': '127.0.0.1:8080',
                             'type': 'header',
                             'headerName': 'Host',
                             'direction': 'request'
                         },
                         {
-                            'log': 'Connection: Keep-Alive',
+                            'log': 'Keep-Alive',
                             'type': 'header',
                             'headerName': 'Connection',
                             'direction': 'request'
                         },
                         {
-                            'log': 'User-Agent: Apache-HttpClient/4.3.5 (java 1.5)',
+                            'log': 'Apache-HttpClient/4.3.5 (java 1.5)',
                             'type': 'header',
                             'headerName': 'User-Agent',
                             'direction': 'request'
                         },
                         {
-                            'log': 'Accept-Encoding: gzip,deflate',
+                            'log': 'gzip,deflate',
                             'type': 'header',
                             'headerName': 'Accept-Encoding',
                             'direction': 'request'
@@ -166,25 +166,25 @@ describe('WireLogParser', function () {
                             'direction': 'response'
                         },
                         {
-                            'log': 'Date: Mon, 20 Oct 2014 08:25:27 GMT',
+                            'log': 'Mon, 20 Oct 2014 08:25:27 GMT',
                             'type': 'header',
                             'headerName': 'Date',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Type: application/json; charset=utf-8',
+                            'log': 'application/json; charset=utf-8',
                             'type': 'header',
                             'headerName': 'Content-Type',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Length: 87',
+                            'log': '87',
                             'type': 'header',
                             'headerName': 'Content-Length',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Server: Jetty(9.2.3.v20140905)',
+                            'log': 'Jetty(9.2.3.v20140905)',
                             'type': 'header',
                             'headerName': 'Server',
                             'direction': 'response'
@@ -241,25 +241,25 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'request'
                         },
                         {
-                            'log': 'Host: 127.0.0.1:8080',
+                            'log': '127.0.0.1:8080',
                             'type': 'header',
                             'headerName': 'Host',
                             'direction': 'request'
                         },
                         {
-                            'log': 'Connection: Keep-Alive',
+                            'log': 'Keep-Alive',
                             'type': 'header',
                             'headerName': 'Connection',
                             'direction': 'request'
                         },
                         {
-                            'log': 'User-Agent: Apache-HttpClient/4.3.5 (java 1.5)',
+                            'log': 'Apache-HttpClient/4.3.5 (java 1.5)',
                             'type': 'header',
                             'headerName': 'User-Agent',
                             'direction': 'request'
                         },
                         {
-                            'log': 'Accept-Encoding: gzip,deflate',
+                            'log': 'gzip,deflate',
                             'type': 'header',
                             'headerName': 'Accept-Encoding',
                             'direction': 'request'
@@ -279,25 +279,25 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'response'
                         },
                         {
-                            'log': 'Date: Mon, 20 Oct 2014 08:25:27 GMT',
+                            'log': 'Mon, 20 Oct 2014 08:25:27 GMT',
                             'type': 'header',
                             'headerName': 'Date',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Type: application/json; charset=utf-8',
+                            'log': 'application/json; charset=utf-8',
                             'type': 'header',
                             'headerName': 'Content-Type',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Length: 87',
+                            'log': '87',
                             'type': 'header',
                             'headerName': 'Content-Length',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Server: Jetty(9.2.3.v20140905)',
+                            'log': 'Jetty(9.2.3.v20140905)',
                             'type': 'header',
                             'headerName': 'Server',
                             'direction': 'response'
@@ -323,13 +323,13 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'request'
                         },
                         {
-                            'log': 'Host: 127.0.0.1:9292',
+                            'log': '127.0.0.1:9292',
                             'type': 'header',
                             'headerName': 'Host',
                             'direction': 'request'
                         },
                         {
-                            'log': 'User-Agent: Apache-HttpClient/4.3.5 (java 1.5)',
+                            'log': 'Apache-HttpClient/4.3.5 (java 1.5)',
                             'type': 'header',
                             'headerName': 'User-Agent',
                             'direction': 'request'
@@ -350,25 +350,25 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'response'
                         },
                         {
-                            'log': 'Date: Tue, 21 Oct 2014 14:38:11 GMT',
+                            'log': 'Tue, 21 Oct 2014 14:38:11 GMT',
                             'type': 'header',
                             'headerName': 'Date',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Type: application/json; charset=utf-8',
+                            'log': 'application/json; charset=utf-8',
                             'type': 'header',
                             'headerName': 'Content-Type',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Length: 36',
+                            'log': '36',
                             'type': 'header',
                             'headerName': 'Content-Length',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Server: Jetty(9.2.3.v20140905)',
+                            'log': 'Jetty(9.2.3.v20140905)',
                             'type': 'header',
                             'headerName': 'Server',
                             'direction': 'response'
@@ -459,13 +459,13 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'request'
                         },
                         {
-                            'log': 'Host: 127.0.0.1:9292',
+                            'log': '127.0.0.1:9292',
                             'type': 'header',
                             'headerName': 'Host',
                             'direction': 'request'
                         },
                         {
-                            'log': 'User-Agent: Apache-HttpClient/4.3.5 (java 1.5)',
+                            'log': 'Apache-HttpClient/4.3.5 (java 1.5)',
                             'type': 'header',
                             'headerName': 'User-Agent',
                             'direction': 'request'
@@ -486,25 +486,25 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'response'
                         },
                         {
-                            'log': 'Date: Tue, 21 Oct 2014 14:38:11 GMT',
+                            'log': 'Tue, 21 Oct 2014 14:38:11 GMT',
                             'type': 'header',
                             'headerName': 'Date',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Type: application/json; charset=utf-8',
+                            'log': 'application/json; charset=utf-8',
                             'type': 'header',
                             'headerName': 'Content-Type',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Length: 36',
+                            'log': '36',
                             'type': 'header',
                             'headerName': 'Content-Length',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Server: Jetty(9.2.3.v20140905)',
+                            'log': 'Jetty(9.2.3.v20140905)',
                             'type': 'header',
                             'headerName': 'Server',
                             'direction': 'response'
@@ -530,13 +530,13 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'request'
                         },
                         {
-                            'log': 'Host: 127.0.0.1:9292',
+                            'log': '127.0.0.1:9292',
                             'type': 'header',
                             'headerName': 'Host',
                             'direction': 'request'
                         },
                         {
-                            'log': 'User-Agent: Apache-HttpClient/4.3.5 (java 1.5)',
+                            'log': 'Apache-HttpClient/4.3.5 (java 1.5)',
                             'type': 'header',
                             'headerName': 'User-Agent',
                             'direction': 'request'
@@ -557,25 +557,25 @@ Server: Jetty(9.2.3.v20140905)
                             'direction': 'response'
                         },
                         {
-                            'log': 'Date: Tue, 21 Oct 2014 14:38:11 GMT',
+                            'log': 'Tue, 21 Oct 2014 14:38:11 GMT',
                             'type': 'header',
                             'headerName': 'Date',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Type: application/json; charset=utf-8',
+                            'log': 'application/json; charset=utf-8',
                             'type': 'header',
                             'headerName': 'Content-Type',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Content-Length: 36',
+                            'log': '36',
                             'type': 'header',
                             'headerName': 'Content-Length',
                             'direction': 'response'
                         },
                         {
-                            'log': 'Server: Jetty(9.2.3.v20140905)',
+                            'log': 'Jetty(9.2.3.v20140905)',
                             'type': 'header',
                             'headerName': 'Server',
                             'direction': 'response'

@@ -40,6 +40,10 @@ var WireLogParser = (function () {
             }
 
             this.isContentTypeJSON = false;
+
+            this.httpMethod = '';
+            this.endPoint = '';
+            this.host = '';
         }
 
         WireLogUnit.prototype.add = function (arg) {
@@ -61,6 +65,10 @@ var WireLogParser = (function () {
                 ) {
                     this.isContentTypeJSON = true;
                 }
+
+                // if (log.headerName === 'Host' || log.headerName === 'host') {
+                //     this.host =
+                // }
             }
             this.logs.push(log);
         };
@@ -89,9 +97,16 @@ var WireLogParser = (function () {
                 }
             };
 
+            var log;
             for (i = 0; i < logsLength; i++) {
-                line = this.logs[i].log;
-                if (this.bePrettyJSON && this.isContentTypeJSON && this.logs[i].type === 'body') {
+                log = this.logs[i];
+                line = log.log;
+
+                if (typeof log.headerName !== 'undefined') {
+                    line = log.headerName + ': ' + line;
+                }
+
+                if (this.bePrettyJSON && this.isContentTypeJSON && log.type === 'body') {
                     try {
                         line = JSON.stringify(JSON.parse(line), null, '    '); // 4 spaces indentation
                     } catch (e) {
@@ -144,6 +159,10 @@ var WireLogParser = (function () {
             return this.requestLog.isEmpty() && this.responseLog.isEmpty();
         };
 
+        WireLog.prototype.getReproducibleOnCurlURL = function () {
+            // this.requestLog
+        };
+
         return WireLog;
     }());
 
@@ -187,6 +206,7 @@ var WireLogParser = (function () {
 
             var headerName = extractHeaderName(log);
             if (typeof headerName !== 'undefined') {
+                log = log.replace(/^[^:]+:\s+/, '');
                 type = 'header';
             }
 
