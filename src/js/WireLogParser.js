@@ -53,23 +53,31 @@ var WireLogParser = (function () {
                 'direction': arg.direction
             };
 
-            var reContentTypeHeader = /^content-type$/i;
-            var reContentTypeJSON = /application\/json/i;
-
-            if (arg.headerName) {
+            if (log.type === 'header') {
                 log.headerName = arg.headerName;
 
                 if (
-                    log.headerName.match(reContentTypeHeader) &&
-                    arg.log.match(reContentTypeJSON)
+                    log.headerName.match(/^content-type$/i) &&
+                    arg.log.match(/application\/json/i)
                 ) {
                     this.isContentTypeJSON = true;
                 }
 
-                // if (log.headerName === 'Host' || log.headerName === 'host') {
-                //     this.host =
+                if (log.headerName === 'Host' || log.headerName === 'host') {
+                    this.host = log.log;
+                }
+            }
+            else if (log.type === 'http-request') {
+                var matches = log.log.match(/^(\S+) (\S+)/);
+                this.httpMethod = matches[1];
+                this.endPoint = matches[2];
+            }
+            else if (log.direction === 'request' && log.type === 'body') {
+                // if (this.httpMethod === 'POST') {
+                    // console.log('!!!!!');
                 // }
             }
+
             this.logs.push(log);
         };
 
@@ -204,18 +212,19 @@ var WireLogParser = (function () {
                 type = 'http-' + direction;
             }
 
-            var headerName = extractHeaderName(log);
-            if (typeof headerName !== 'undefined') {
-                log = log.replace(/^[^:]+:\s+/, '');
-                type = 'header';
-            }
 
             // To set 'body' into `type` when log is beyond the blank line
+            var headerName = extractHeaderName(log);
             var logBlock = logContainer[group].logs;
             var lastLogItem = logBlock[logBlock.length - 1];
             if (typeof lastLogItem !== 'undefined' && lastLogItem.type === 'body') {
                 type = 'body';
                 headerName = undefined;
+            }
+            else if (typeof headerName !== 'undefined') {
+                console.log(log);
+                log = log.replace(/^[^:]+:\s+/, '');
+                type = 'header';
             }
 
             logContainer[group].add({
