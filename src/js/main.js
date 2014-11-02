@@ -36,11 +36,13 @@
                     responseLog = log.responseLog.toString();
                 }
 
-                log.getCurlCmd();
                 var logText = '>>>>>>>> REQUEST\n' + requestLog +
                               '<<<<<<<< RESPONSE\n' + responseLog;
 
-                data.logs.$add(key, logText);
+                data.logs.$add(key, {
+                    "logText": logText,
+                    "curlCmd": log.getCurlCmd()
+                });
             });
         };
 
