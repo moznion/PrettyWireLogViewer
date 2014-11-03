@@ -14,6 +14,7 @@
     <link href="vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="vendor/js/utf8.js"></script>
     <script src="vendor/js/micro-location.js"></script>
+    <script src="vendor/js/ZeroClipboard.min.js"></script>
     <script src="src/js/WireLogParser.js"></script>
     <link href="src/css/main.css" rel="stylesheet" type="text/css" />
   </head>
@@ -74,9 +75,18 @@
       </div>
 
       <div id="right">
-        <div v-repeat="logs">
+        <div v-repeat="l: logs" v-component="log">
           <h3>{{ $key }}</h3>
-          <textarea class="result form-control" rows=15 readonly>{{ $value }}</textarea>
+          <textarea class="result form-control" rows=15 readonly>{{ l.logText }}</textarea>
+          <div class="form-group">
+            <label class="control-label" style="margin-top:10px">Curl Cmd</label>
+            <div class="curl-command-box input-group">
+              <input type="text" class="form-control" value="{{ l.curlCmd }}" readonly>
+              <span class="input-group-btn">
+                <button id="cmdCopyButton{{ $index }}" class="btn btn-default" type="button" data-clipboard-text="{{ l.curlCmd }}">Copy</button>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -21,15 +21,19 @@ gulp.task('lint', function () {
 });
 
 gulp.task('bower', ['cleanup-vendor'], function () {
-    var jsFilter = gulpFilter('**/*.js'),
-        cssFilter = gulpFilter('**/*.css');
+    var jsFilter = gulpFilter('**/*.js');
+    var swfFilter = gulpFilter('**/*.swf');
+    var cssFilter = gulpFilter('**/*.css');
 
     return gulp.src(bower())
         .pipe(jsFilter)
         .pipe(gulp.dest('vendor/js'))
         .pipe(jsFilter.restore())
+        .pipe(swfFilter)
+        .pipe(gulp.dest('vendor/js'))
+        .pipe(swfFilter.restore())
         .pipe(cssFilter)
-        .pipe(gulp.dest('vendor/css'));
+        .pipe(gulp.dest('vendor/css'))
 });
 
 gulp.task('cleanup-vendor', function () {

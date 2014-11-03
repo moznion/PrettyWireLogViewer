@@ -35,6 +35,10 @@ textarea.result {
   min-width: 95%;
 }
 
+.curl-command-box {
+  width: 95%;
+}
+
 .pretty-json-toggle {
     position: relative; width: 122px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;

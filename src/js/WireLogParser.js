@@ -40,27 +40,49 @@ var WireLogParser = (function () {
             }
 
             this.isContentTypeJSON = false;
+
+            this.httpMethod = '';
+            this.endPoint = '';
+            this.host = '';
+            this.postParameter = '';
         }
 
         WireLogUnit.prototype.add = function (arg) {
             var log = {
                 'log': arg.log,
-                'type': arg.type
+                'type': arg.type,
+                'direction': arg.direction
             };
+            var matches;
 
-            var reContentTypeHeader = /^content-type$/i;
-            var reContentTypeJSON = /application\/json/i;
-
-            if (arg.headerName) {
+            if (log.type === 'header') {
                 log.headerName = arg.headerName;
 
                 if (
-                    log.headerName.match(reContentTypeHeader) &&
-                    arg.log.match(reContentTypeJSON)
+                    log.headerName.match(/^content-type$/i) &&
+                    arg.log.match(/application\/json/i)
                 ) {
                     this.isContentTypeJSON = true;
                 }
+
+                if (log.headerName === 'Host' || log.headerName === 'host') {
+                    this.host = log.log;
+                }
             }
+            else if (log.type === 'http-request') {
+                matches = log.log.match(/^(\S+) (\S+)/);
+                if (matches) {
+                    this.httpMethod = matches[1];
+                    this.endPoint = matches[2];
+                }
+            }
+            else if (log.direction === 'request' && log.type === 'body') {
+                // extract post parameters from request body
+                if (this.httpMethod === 'POST') {
+                    this.postParameter += log.log.replace(/"/g, "\\\"");
+                }
+            }
+
             this.logs.push(log);
         };
 
@@ -88,9 +110,16 @@ var WireLogParser = (function () {
                 }
             };
 
+            var log;
             for (i = 0; i < logsLength; i++) {
-                line = this.logs[i].log;
-                if (this.bePrettyJSON && this.isContentTypeJSON && this.logs[i].type === 'body') {
+                log = this.logs[i];
+                line = log.log;
+
+                if (typeof log.headerName !== 'undefined') {
+                    line = log.headerName + ': ' + line;
+                }
+
+                if (this.bePrettyJSON && this.isContentTypeJSON && log.type === 'body') {
                     try {
                         line = JSON.stringify(JSON.parse(line), null, '    '); // 4 spaces indentation
                     } catch (e) {
@@ -143,6 +172,23 @@ var WireLogParser = (function () {
             return this.requestLog.isEmpty() && this.responseLog.isEmpty();
         };
 
+        /**
+         * Returns reproducible command which runs on curl
+         */
+        WireLog.prototype.getCurlCmd = function () {
+            var reqLog = this.requestLog;
+
+            var url = 'curl ';
+            url += reqLog.host + reqLog.endPoint + ' ';
+            url += '-X ' + reqLog.httpMethod + ' ';
+
+            if (reqLog.postParameter) {
+                url += '-d "' + reqLog.postParameter + '"';
+            }
+
+            return url;
+        };
+
         return WireLog;
     }());
 
@@ -184,23 +230,25 @@ var WireLogParser = (function () {
                 type = 'http-' + direction;
             }
 
-            var headerName = extractHeaderName(log);
-            if (typeof headerName !== 'undefined') {
-                type = 'header';
-            }
 
             // To set 'body' into `type` when log is beyond the blank line
+            var headerName = extractHeaderName(log);
             var logBlock = logContainer[group].logs;
             var lastLogItem = logBlock[logBlock.length - 1];
             if (typeof lastLogItem !== 'undefined' && lastLogItem.type === 'body') {
                 type = 'body';
                 headerName = undefined;
             }
+            else if (typeof headerName !== 'undefined') {
+                log = log.replace(/^[^:]+:\s+/, '');
+                type = 'header';
+            }
 
             logContainer[group].add({
                 'log': log,
                 'type': type,
-                'headerName': headerName
+                'headerName': headerName,
+                'direction': direction
             });
         };
 
