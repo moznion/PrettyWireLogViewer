@@ -79,7 +79,7 @@ var WireLogParser = (function () {
             else if (log.direction === 'request' && log.type === 'body') {
                 // extract post parameters from request body
                 if (this.httpMethod === 'POST') {
-                    this.postParameter += log.log.replace(/"/g, '\\"');
+                    this.postParameter += log.log.replace(/"/g, "\\\"");
                 }
             }
 

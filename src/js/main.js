@@ -1,5 +1,5 @@
 (function () {
-    /* global WireLogParser:false,Location:false */
+    /* global WireLogParser:false,Location:false,ZeroClipboard:false */
     'use strict';
 
     var l = Location.parse(document.location.href);
@@ -45,6 +45,13 @@
                 });
             });
         };
+
+        Vue.component('log', {
+            ready: function () {
+                // to pre-register copy button event
+                new ZeroClipboard(document.getElementById('cmdCopyButton' + this.$index));
+            }
+        });
 
         return new Vue({
             el: '#main',
