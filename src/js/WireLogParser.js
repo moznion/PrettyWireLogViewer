@@ -1,4 +1,6 @@
-var utf8 = utf8; // import from external
+// import from external
+var utf8 = utf8;
+var _ = _;
 
 var WireLogParser = (function () {
     'use strict';
@@ -178,15 +180,27 @@ var WireLogParser = (function () {
         WireLog.prototype.getCurlCmd = function () {
             var reqLog = this.requestLog;
 
-            var url = 'curl ';
-            url += reqLog.host + reqLog.endPoint + ' ';
-            url += '-X ' + reqLog.httpMethod + ' ';
-
-            if (reqLog.postParameter) {
-                url += '-d "' + reqLog.postParameter + '"';
+            if (!reqLog) {
+                return '';
             }
 
-            return url;
+            var cmd = 'curl ';
+
+            var logs = reqLog.logs;
+            _(logs).forEach(function (log) {
+                if (log.type === 'header') {
+                    cmd += '-H "' + log.headerName + ': ' + log.log + '" ';
+                }
+            });
+
+            cmd += reqLog.host + reqLog.endPoint + ' ';
+            cmd += '-X ' + reqLog.httpMethod + ' ';
+
+            if (reqLog.postParameter) {
+                cmd += '-d "' + reqLog.postParameter + '"';
+            }
+
+            return cmd;
         };
 
         return WireLog;
@@ -351,4 +365,5 @@ var WireLogParser = (function () {
 if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'test') {
     exports.WireLogParser = WireLogParser;
     utf8 = require('utf8');
+    _ = require('lodash');
 }
