@@ -1,6 +1,5 @@
 var should = require('chai').should();
 var heredoc = require('heredoc');
-var utf8 = require('utf8');
 
 var parser = require('../src/js/WireLogParser.js');
 
@@ -242,7 +241,7 @@ Server: Jetty(9.2.3.v20140905)
             });
 
             it('should get curl command rightly', function () {
-                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].getCurlCmd().should.equal('curl 127.0.0.1:8080/api/foo?bar=123&buz=456 -X GET ');
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].getCurlCmd().should.equal('curl -H "Host: 127.0.0.1:8080" -H "Connection: Keep-Alive" -H "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)" -H "Accept-Encoding: gzip,deflate" 127.0.0.1:8080/api/foo?bar=123&buz=456 -X GET ');
             });
         });
 
@@ -452,8 +451,8 @@ Server: Jetty(9.2.3.v20140905)
             });
 
             it('should get curl command rightly', function () {
-                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].getCurlCmd().should.equal('curl 127.0.0.1:8080/api/foo?bar=123&buz=456 -X GET ');
-                parsed['GET /api/bar HTTP/1.1'].getCurlCmd().should.equal('curl 127.0.0.1:9292/api/bar -X GET ');
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].getCurlCmd().should.equal('curl -H "Host: 127.0.0.1:8080" -H "Connection: Keep-Alive" -H "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)" -H "Accept-Encoding: gzip,deflate" 127.0.0.1:8080/api/foo?bar=123&buz=456 -X GET ');
+                parsed['GET /api/bar HTTP/1.1'].getCurlCmd().should.equal('curl -H "Host: 127.0.0.1:9292" -H "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)" 127.0.0.1:9292/api/bar -X GET ');
             });
         });
 
@@ -734,7 +733,7 @@ Server: Jetty(9.2.3.v20140905)
 
             it('should get curl command rightly', function () {
                 var parsed = p.parse(logTextPost);
-                parsed['POST /foo/bar HTTP/1.1'].getCurlCmd().should.equal('curl example.com/foo/bar -X POST -d "{  \\"Location\\" : \\"Japan\\",  \\"Job\\" : \\"Ninja\\"}"');
+                parsed['POST /foo/bar HTTP/1.1'].getCurlCmd().should.equal('curl -H "Content-Type: application/json; charset=utf-8" -H "Content-Length: 42" -H "Host: example.com" example.com/foo/bar -X POST -d "{  \\"Location\\" : \\"Japan\\",  \\"Job\\" : \\"Ninja\\"}"');
             });
         });
     });
