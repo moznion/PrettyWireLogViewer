@@ -737,5 +737,114 @@ Server: Jetty(9.2.3.v20140905)
             });
         });
     });
+
+    describe('for coverage', function () {
+        describe('something inserted after identifier', function () {
+            var logTextInsertedSomething = heredoc(function () {/*
+17:25:27.278 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 >> "GET /api/foo?bar=123&buz=456 HTTP/1.1[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 >> "Host: 127.0.0.1:8080[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 >> "Connection: Keep-Alive[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 >> "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 >> "Accept-Encoding: gzip,deflate[\r][\n]"
+17:25:27.278 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 >> "[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "HTTP/1.1 200 OK[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "Date: Mon, 20 Oct 2014 08:25:27 GMT[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "Content-Type: application/json; charset=utf-8[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "Content-Length: 87[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "Server: Jetty(9.2.3.v20140905)[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "[\r][\n]"
+17:25:58.116 [main] DEBUG org.apache.http.wire [] - http-outgoing-0 << "{"code":200,"messages":[],"data":{"foo":[{"bar":123,"buz":456},{"bar":321,"buz":654}]}}"
+            */});
+            var p = new parser.WireLogParser({
+                'removeNewLine': true,
+                'bePrettyJSON': false,
+            });
+            var parsed = p.parse(logTextInsertedSomething);
+            it('should parse rightly', function () {
+                Object.keys(parsed).length.should.equal(1);
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].requestLog.logs.should.deep.equal(
+                    [
+                        {
+                            'log': 'GET /api/foo?bar=123&buz=456 HTTP/1.1',
+                            'type': 'http-request',
+                            'direction': 'request'
+                        },
+                        {
+                            'log': '127.0.0.1:8080',
+                            'type': 'header',
+                            'headerName': 'Host',
+                            'direction': 'request'
+                        },
+                        {
+                            'log': 'Keep-Alive',
+                            'type': 'header',
+                            'headerName': 'Connection',
+                            'direction': 'request'
+                        },
+                        {
+                            'log': 'Apache-HttpClient/4.3.5 (java 1.5)',
+                            'type': 'header',
+                            'headerName': 'User-Agent',
+                            'direction': 'request'
+                        },
+                        {
+                            'log': 'gzip,deflate',
+                            'type': 'header',
+                            'headerName': 'Accept-Encoding',
+                            'direction': 'request'
+                        },
+                        {
+                            'log': '',
+                            'type': 'body',
+                            'direction': 'request'
+                        }
+                    ]
+                );
+                parsed['GET /api/foo?bar=123&buz=456 HTTP/1.1'].responseLog.logs.should.deep.equal(
+                    [
+                        {
+                            'log': 'HTTP/1.1 200 OK',
+                            'type': 'http-response',
+                            'direction': 'response'
+                        },
+                        {
+                            'log': 'Mon, 20 Oct 2014 08:25:27 GMT',
+                            'type': 'header',
+                            'headerName': 'Date',
+                            'direction': 'response'
+                        },
+                        {
+                            'log': 'application/json; charset=utf-8',
+                            'type': 'header',
+                            'headerName': 'Content-Type',
+                            'direction': 'response'
+                        },
+                        {
+                            'log': '87',
+                            'type': 'header',
+                            'headerName': 'Content-Length',
+                            'direction': 'response'
+                        },
+                        {
+                            'log': 'Jetty(9.2.3.v20140905)',
+                            'type': 'header',
+                            'headerName': 'Server',
+                            'direction': 'response'
+                        },
+                        {
+                            'log': '',
+                            'type': 'body',
+                            'direction': 'response'
+                        },
+                        {
+                            'log': '{"code":200,"messages":[],"data":{"foo":[{"bar":123,"buz":456},{"bar":321,"buz":654}]}}',
+                            'type': 'body',
+                            'direction': 'response'
+                        }
+                    ]
+                );
+            });
+        });
+    });
 });
 
