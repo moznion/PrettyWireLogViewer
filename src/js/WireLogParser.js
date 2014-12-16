@@ -320,7 +320,7 @@ var WireLogParser = (function () {
             }
 
             // for response
-            found = line.match(/[.]wire\s+-\s+http-outgoing-([0-9]+) << ("?)(.*)\2/);
+            found = line.match(/[.]wire.+http-outgoing-([0-9]+) << ("?)(.*)\2/);
             if (found) {
                 connection = found[1];
                 entity = found[3];
